@@ -1,0 +1,54 @@
+﻿@model Tracker.Models.IndexViewModel
+@{
+    ViewBag.Title = "Strona główna";
+}
+
+<div class="panel-group">
+    <div class="panel">
+        <div class="app-stats">
+            <div class="app-stat">
+                <p>@Model.NumberOfUsers</p>
+                Użytkowników
+            </div>
+            <div class="app-stat">
+                <p>@Model.NumberOfTracks</p>
+                Tras
+            </div>
+            <div class="app-stat">
+                <p>@Model.NumberOfTrackPoints</p>
+                Punktów tras
+            </div>
+        </div>
+    </div>
+</div> 
+
+<div class="panel-group">
+    <div class="panel">
+        <h2>Twoje najnowsze trasy</h2>
+        <div>
+            @if (Model.Tracks.Count() > 0)
+            {
+                foreach (var track in Model.Tracks)
+                {
+                    <div class="track-card">
+                        @Html.ActionLink(@track.Name, "Details", "Track", new { id = track.Id }, null)
+                        <div class="track-card-row">
+                            <p><span>Data dodania:</span> @track.UploadDate</p>
+                        </div>
+                        <div class="track-card-row">
+                            <p><span>Start:</span> @track.StartLocation</p>
+                            <p><span>Koniec:</span> @track.EndLocation</p>
+                        </div>
+                        <div class="track-card-row">
+                            <p><span>Dystans:</span> @Math.Round(track.Distance, 2) km</p>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p>Nie przesłane w tym miesiącu żadnej trasy</p>
+            }
+        </div>
+    </div>
+</div> 

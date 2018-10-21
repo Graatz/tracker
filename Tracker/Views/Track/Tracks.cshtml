@@ -1,0 +1,72 @@
+﻿@model Tracker.Models.ListTracksViewModel
+
+@{
+    ViewBag.Title = "Tracks";
+}
+
+@{
+    List<SelectListItem> listItems = new List<SelectListItem>();
+    listItems.Add(new SelectListItem
+    {
+        Text = "Od najstarszej",
+        Value = "Exemplo1"
+    });
+    listItems.Add(new SelectListItem
+    {
+        Text = "Od najnowszej",
+        Value = "Exemplo2",
+        Selected = true
+    });
+}
+
+<div class="panel-group">
+    <div class="panel">
+        <h2>Trasy (Strona @Model.CurrentPage)</h2>
+
+        @using (Html.BeginForm("Sort", "Track"))
+        {
+            <div class="form-group-row">
+                @Html.DropDownList("Sort", listItems)
+                <input type="submit" value="Sortuj" class="button-default" />
+            </div>
+        }
+
+        <div class="track-cards">
+            @foreach (var track in Model.Tracks)
+            {
+                <div class="track-card">
+                    @Html.ActionLink(@track.Name, "Details", new { id = track.Id }, null)
+                    <div class="track-card-row">
+                        <p><span>Data dodania:</span> @track.UploadDate</p>
+                    </div>
+                    <div class="track-card-row">
+                        <p><span>Start:</span> @track.StartLocation</p>
+                        <p><span>Koniec:</span> @track.EndLocation</p>
+                    </div>
+                    <div class="track-card-row">
+                        <p><span>Dystans:</span> @Math.Round(track.Distance, 2) km</p>
+                    </div>
+                </div>
+
+            }
+        </div>
+
+        <div class="pagination">
+            @for (int i = 0; i < Math.Ceiling((double)((double)Model.NumberOfTracks / (double)Model.NumberOfTracksPerPage)); i++)
+            {
+                if (i == Model.CurrentPage - 1)
+                {
+                    @Html.ActionLink((i + 1).ToString() + " ", "TracksPage", new { startingIndex = i * 10, searchModel = Model }, new { @class = "active-page" })
+                }
+                else
+                {
+                    @Html.ActionLink((i + 1).ToString() + " ", "TracksPage", new { startingIndex = i * 10, searchModel = Model }, null)
+                }
+            }
+        </div>
+        
+    </div>
+</div>
+
+
+

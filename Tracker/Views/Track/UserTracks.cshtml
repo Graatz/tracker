@@ -1,0 +1,26 @@
+﻿@model Tracker.Models.UserTracksViewModel
+@{
+    ViewBag.Title = "Trasy";
+}
+
+<h2>@ViewBag.Title.</h2>
+
+<div>
+    <h4>Trasy uzytkownika @User.Identity.Name</h4>
+    <hr />
+    @if (Model.Tracks != null && Model.Tracks.Count > 0)
+    {
+        foreach(var track in Model.Tracks)
+        {
+            <strong><p>@track.Name</p></strong>
+            <p>minimum latitude: @track.MinLatitude</p>
+            <p>maximum latitude: @track.MaxLatitude</p>
+            <p>minimum longitude: @track.MinLongitude</p>
+            <p>maximum longitude: @track.MaxLongitude</p>
+        }
+    }
+    else
+    {
+        <p>Brak tras</p>
+    }
+</div>

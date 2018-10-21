@@ -1,0 +1,113 @@
+﻿@model Tracker.Models.Track
+@{
+    ViewBag.Title = "Upload form";
+}
+
+<div class="panel-group">
+    <div class="panel">
+        <h2>Prześlij nową trasę</h2>
+        <p>Wybierz pliki z trasami w formacie .gpx</p>
+
+        @using (Html.BeginForm("Upload", "Track", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <div class="form-group">
+                @Html.LabelFor(m => m.Name)
+                @Html.TextBoxFor(m => m.Name)
+                @Html.ValidationMessageFor(m => m.Name)
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Description)
+                @Html.TextBoxFor(m => m.Description)
+                @Html.ValidationMessageFor(m => m.Description)
+            </div>
+
+            <div class="form-group">
+                <label>Wybierz plik</label>
+                <input type="file" name="postedFiles" multiple/>
+            </div>
+
+            <input type="submit" value="Prześlij" class="button-default" />
+
+            @Html.HiddenFor(m => m.Id)
+            @Html.HiddenFor(m => m.UploadDate)
+            @Html.HiddenFor(m => m.MaxLatitude)
+            @Html.HiddenFor(m => m.MaxLongitude)
+            @Html.HiddenFor(m => m.MinLatitude)
+            @Html.HiddenFor(m => m.MinLongitude)
+            @Html.HiddenFor(m => m.UserId)
+
+            @Html.AntiForgeryToken()
+        }
+    </div>
+</div> 
+
+<div class="panel-group">
+    <div class="panel">
+        <h2>Zaplanuj trase</h2>
+        <p>Aby zaplanować swoją trasę, klikaj kolejne punkty na mapie poniżej.</p>
+        <div class="form-group">
+            @Html.Label("Nazwa trasy")
+            <div class="control-group">
+                <input type="text" placeholder="Nazwa trasy" />
+                <input type="submit" value="Zatwierdź" class="button" />
+            </div>
+        </div>
+        <div id="search-map"></div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        function initMap() {
+            let trackCoordinates = [];
+            let myLatLng = { lat: 52.237049, lng: 21.017532 };
+            let startMarker = new google.maps.Marker();
+            let endMarker = new google.maps.Marker();
+            let trackPath = new google.maps.Polyline();
+
+            var map = new google.maps.Map(document.getElementById('search-map'), {
+                zoom: 6,
+                center: myLatLng,
+                disableDefaultUI: true,
+                mapTypeId: 'terrain',
+                draggableCursor: 'pointer'
+            });
+
+            google.maps.event.addListener(map, "click", function (e) {
+                trackCoordinates.push({ lat: e.latLng.lat(), lng: e.latLng.lng() })
+               
+                startMarker = new google.maps.Marker({
+                    position: { lat: trackCoordinates[0].lat, lng: trackCoordinates[0].lng },
+                    map: map,
+                    title: 'Start'
+                });
+                startMarker.setMap(map);
+                
+                
+                endMarker.setMap(null);
+                endMarker = new google.maps.Marker({
+                    position: { lat: e.latLng.lat(), lng: e.latLng.lng() },
+                    map: map,
+                    title: 'End'
+                });
+                endMarker.setMap(map);
+
+                trackPath.setMap(null);
+                trackPath = new google.maps.Polyline({
+                    path: trackCoordinates,
+                    geodesic: true,
+                    strokeColor: '#FF0000',
+                    strokeOpacity: 1.0,
+                    strokeWeight: 4
+                });
+                trackPath.setMap(map);
+            });
+        }
+    </script>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyByHNqSflMX894xRV1DpZB81LMMrBAsDlI&callback=initMap">
+    </script>
+}
+

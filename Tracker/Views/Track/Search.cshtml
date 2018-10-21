@@ -1,0 +1,76 @@
+﻿@model Tracker.Models.TrackSearchModel
+@{
+    ViewBag.Title = "Search";
+}
+
+@{
+    List<SelectListItem> listItems = new List<SelectListItem>();
+    listItems.Add(new SelectListItem
+    {
+        Text = "Minimalnie",
+        Value = "Exemplo1"
+    });
+    listItems.Add(new SelectListItem
+    {
+        Text = "Maksymalnie",
+        Value = "Exemplo2",
+        Selected = true
+    });
+}
+
+<div class="panel-group">
+    <div class="panel">
+        <h2>Szukaj tras</h2>
+
+        @using (Html.BeginForm("FilterTracks", "Track", FormMethod.Post, new { @class = "search-track-form" }))
+            {
+            <div class="search-panel">
+                <div class="form-group search-name">
+                    @Html.TextBoxFor(m => m.Name, new { @placeholder = "Nazwa trasy" })
+                </div> 
+
+                <div class="search-filters">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Location)
+                        @Html.TextBoxFor(m => m.Location, new { @placeholder = "Lokalizacja" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Date)
+                        <input type="date" value="Date" name="Date" placeholder="Data" />
+                    </div> 
+                </div>
+
+                @Html.AntiForgeryToken()
+                <div class="form-group-row">
+                    <button type="button" class="button-info show-filters-button">Pokaż filtry</button>
+                    <input type="submit" value="Szukaj" class="button-default" />
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            let filtersActive = false;
+            $(".show-filters-button").click(function () {
+                console.log("lel");
+                if (filtersActive == false) {
+                    console.log("lel2");
+                    filtersActive = true;
+                    $(".search-filters").addClass("search-filters-active");
+                    $(".show-filters-button").html('Schowaj filtry');
+                }
+                else {
+                    filtersActive = false;
+                    $(".search-filters").removeClass("search-filters-active");
+                    $(".show-filters-button").html('Pokaż filtry');
+                }
+            })
+        });
+    </script>
+}

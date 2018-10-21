@@ -1,0 +1,68 @@
+﻿@using Tracker.Models
+@model LoginViewModel
+@{
+    ViewBag.Title = "Logowanie";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Poppins:300,400,700,900" rel="stylesheet">
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="login-wrapper">
+        <div class="login-background"></div>
+        <div class="login-content">
+            <section id="loginForm">
+                @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "login-form", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <h2 class="login-title">TRACKER</h2>
+                    <p class="login-description">Aby korzystać z aplikacji, zaloguj się.</p>
+
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    <div class="form-group">
+                        <div class="control-group">
+                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Login", @spellcheck = "false" })
+                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="control-group">
+                            @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "Hasło", @spellcheck = "false" })
+                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="control-group">
+                            @Html.CheckBoxFor(m => m.RememberMe, new { @class = "remember-me-checkbox" })
+                            <p class="remember-text">Zapamiętać cię?</p>
+                        </div>
+
+                        <div>
+                            <input type="submit" value="Zaloguj" class="button-info" />
+                        </div>
+                    </div>
+
+                    @Html.ActionLink("Zarejestruj się jako nowy użytkownik", "Register")
+
+                    @* Włącz to ustawienie po włączeniu potwierdzenia konta dla funkcji resetowania hasła
+                        <p>
+                            @Html.ActionLink("Nie pamiętasz hasła?", "ForgotPassword")
+                        </p>*@
+                }
+            </section>
+        </div>
+    </div>
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }
+</body>
+</html>

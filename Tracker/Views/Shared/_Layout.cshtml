@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title — Tracker</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Poppins:300,400,700,900" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css"
+          integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
+          crossorigin="" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="navbar">
+            <div class="nav">
+                <ul class="menu">
+                    <li class="menu-item">
+                        @Html.ActionLink("Strona główna", "Index", "Home")
+                    </li>
+
+                    <li class="menu-item">
+                        @Html.ActionLink("Trasy", "Tracks", "Track", new { startingIndex = 0 }, null)
+                    </li>
+
+                    <li class="menu-item">
+                        @Html.ActionLink("Szukaj", "Search", "Track")
+                    </li>
+
+                    <li class="menu-item dropdown">
+                        <a class="dropbtn">Tabele</a>
+                        <div class="dropdown-content">
+                            @Html.ActionLink("Tabela użytkowników", "UsersTable", "Manage")
+                            @Html.ActionLink("Tabela tras", "TracksTable", "Track")
+                        </div>
+                    </li>
+
+                    <li class="menu-item">
+                        <input type="button" value="Prześlij trasę" class="button-default" onclick="location.href='@Url.Action("UploadForm", "Track")'" />
+                    </li>
+
+                    <li class="menu-item">
+                        <input type="button" value="Importuj trasy" class="button-info" onclick="location.href='https://www.strava.com/oauth/authorize?client_id=27093&redirect_uri=http%3a%2f%2flocalhost%3a53245%2fTrack%2fAuthorization&response_type=code&approval_prompt=force&scope=view_private'" />
+                    </li>
+                </ul>
+
+                @Html.Partial("_LoginPartial")
+            </div>
+            </div>
+
+        <div class="container">
+            @RenderBody()    
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/chartjs")
+    @RenderSection("scripts", required: false)
+</body>
+
+</html>
+
