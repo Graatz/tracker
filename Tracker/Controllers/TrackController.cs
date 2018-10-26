@@ -107,6 +107,12 @@ namespace Tracker.Controllers
                     result = result.Where(t => t.TrackDate.Equals(searchModel.Date));
                 if (!string.IsNullOrEmpty(searchModel.Location))
                     result = result.Where(t => t.StartLocation.Contains(searchModel.Location) || t.EndLocation.Contains(searchModel.Location));
+                if (!string.IsNullOrEmpty(searchModel.User))
+                {
+                    var user = db.Users.SingleOrDefault(u => u.UserName.Equals(searchModel.User));
+                    if (user != null)
+                        result = result.Where(t => t.UserId == user.Id);
+                }
             }
 
             return result;

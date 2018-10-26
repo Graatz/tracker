@@ -804,3 +804,35 @@ select {
     }
 }
 
+.manage-tiles {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .manage-tile {
+        border: none;
+        background-color: $color;
+        color: #fff;
+        width: 100px;
+        height: 100px;
+        margin-right: 15px;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center; 
+        transition: background-color 0.15s ease-in-out;
+        font-size: 12px;
+        text-transform: uppercase;
+        border-radius: 3px;
+        font-weight: 900;
+
+        &:last-child {
+            margin-right: 0px;
+        }
+
+        &:hover {
+            background-color: $color-hover;
+        }
+    }
+}
+

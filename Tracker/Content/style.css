@@ -1023,4 +1023,49 @@ select:focus {
 .buttons-row input:first-child {
   margin-right: 5px;
 }
+
+.manage-tiles {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.manage-tiles .manage-tile {
+  border: none;
+  background-color: #0066ff;
+  color: #fff;
+  width: 100px;
+  height: 100px;
+  margin-right: 15px;
+  margin-bottom: 15px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-transition: background-color 0.15s ease-in-out;
+  transition: background-color 0.15s ease-in-out;
+  font-size: 12px;
+  text-transform: uppercase;
+  border-radius: 3px;
+  font-weight: 900;
+}
+
+.manage-tiles .manage-tile:last-child {
+  margin-right: 0px;
+}
+
+.manage-tiles .manage-tile:hover {
+  background-color: #0061f1;
+}
 /*# sourceMappingURL=style.css.map */

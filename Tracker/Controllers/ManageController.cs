@@ -87,6 +87,7 @@ namespace Tracker.Controllers
             var userId = User.Identity.GetUserId();
             var model = new ManageIndexViewModel
             {
+                User = User.Identity.GetUserName(),
                 HasPassword = HasPassword(),
                 PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
                 TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),

@@ -22,12 +22,10 @@
 <div class="panel-group">
     <div class="panel">
         <h2>Trasy (Strona @Model.CurrentPage)</h2>
-
-        @using (Html.BeginForm("Sort", "Track"))
+        @if (Model.NumberOfTracks == 0)
         {
-            <div class="form-group-row">
-                @Html.DropDownList("Sort", listItems)
-                <input type="submit" value="Sortuj" class="button-default" />
+            <div class="no-tracks-available-info">
+                <p>Brak wyników</p>
             </div>
         }
 
