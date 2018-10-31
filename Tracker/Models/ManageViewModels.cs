@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
+using System;
 
 namespace Tracker.Models
 {
@@ -19,6 +20,14 @@ namespace Tracker.Models
     {
         public IList<UserLoginInfo> CurrentLogins { get; set; }
         public IList<AuthenticationDescription> OtherLogins { get; set; }
+    }
+
+    public class ManageConfigModel
+    {
+        public int TimeSpanDays { get; set; }
+        public int TimeSpanHours { get; set; }
+        public int TimeSpanMinutes { get; set; }
+        public float SearchingDistance { get; set; }
     }
 
     public class FactorViewModel

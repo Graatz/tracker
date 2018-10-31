@@ -37,18 +37,6 @@ namespace Tracker.Controllers
             return RedirectToAction("Tracks", searchModel);
         }
 
-        public ViewResult UserTracks()
-        {
-            var userId = User.Identity.GetUserId();
-
-            UserTracksViewModel userTracksViewModel = new UserTracksViewModel
-            {
-                Tracks = db.Tracks.Where(t => t.UserId.ToString() == userId).ToList()
-            };
-
-            return View(userTracksViewModel);
-        }
-
         public ViewResult UploadForm()
         {
             var model = new Track();

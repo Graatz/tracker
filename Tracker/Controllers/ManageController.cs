@@ -59,6 +59,20 @@ namespace Tracker.Controllers
             return View(model);
         }
 
+        public ViewResult ManageConfig()
+        {
+            var viewModel = new ManageConfigModel();
+
+            return View(viewModel);
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult UpdateConfig(ManageConfigModel model)
+        {
+            return View("ManageConfig");
+        }
+
         public ActionResult Delete(string id)
         {
             var userInDb = db.Users.SingleOrDefault(u => u.Id == id);

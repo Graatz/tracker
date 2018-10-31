@@ -355,7 +355,6 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Track\UserTracks.cshtml" />
     <Content Include="Views\Track\TracksTable.cshtml" />
     <Content Include="Views\Track\Details.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
@@ -368,6 +367,7 @@
     <Content Include="Views\Track\Compare.cshtml" />
     <Content Include="Views\Track\Authorization.cshtml" />
     <Content Include="Views\Track\ImportConfirmation.cshtml" />
+    <Content Include="Views\Manage\ManageConfig.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
