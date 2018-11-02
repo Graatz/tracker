@@ -1,19 +1,22 @@
 ﻿@model Tracker.Models.ManageIndexViewModel
 @{
-    ViewBag.Title = "Zarządzaj";
+    ViewBag.Title = "Zarządzaj kontem";
 }
 
 <div class="panel-group">
     <div class="panel">
-        @*
-            <p class="text-success">@ViewBag.StatusMessage</p>
-        *@
-        <h2>@ViewBag.Title.</h2>
+        <p class="success-message">@ViewBag.StatusMessage</p>
+        <h2>@ViewBag.Title</h2>
 
         <div class="manage-tiles">
                 @if (Model.HasPassword)
                 {
                     @Html.ActionLink("Moje trasy", "Tracks", "Track", new { User = Model.User }, new { @class = "manage-tile" })
+                }
+
+                @if (Model.HasPassword)
+                {
+                    @Html.ActionLink("Konfiguracja", "ManageConfig", "Manage", null, new { @class = "manage-tile" })
                 }
 
                 @if (Model.HasPassword)

@@ -1,12 +1,12 @@
-﻿@model Tracker.Models.ManageConfigModel
+﻿@model Tracker.Models.UserConfig
 @{
-    ViewBag.Title = "ManageConfig";
+    ViewBag.Title = "Konfiguracja";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="panel-group">
     <div class="panel50">
-        <h2>@ViewBag.Title.</h2>
+        <h2>@ViewBag.Title</h2>
 
         @using (Html.BeginForm("UpdateConfig", "Manage", FormMethod.Post))
         {

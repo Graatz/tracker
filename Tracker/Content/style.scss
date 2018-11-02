@@ -836,3 +836,37 @@ select {
     }
 }
 
+.success-message {
+    width: 100%;
+    height: 51px;
+    background-color: #d6ffce;
+    border: 1px solid #a8f385;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: $basic-padding;
+
+    p {
+        color: #4ead28;
+    }
+
+    .close-button {
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:after {
+            content:"\d7";
+            font-size: 20px; 
+            color: #4ead28;
+            text-align: center;
+        }
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}

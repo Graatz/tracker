@@ -8,6 +8,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Tracker.Models;
 using System.Diagnostics;
+using System.Data.Entity.Validation;
 
 namespace Tracker.Controllers
 {
@@ -61,16 +62,59 @@ namespace Tracker.Controllers
 
         public ViewResult ManageConfig()
         {
-            var viewModel = new ManageConfigModel();
+            var userId = User.Identity.GetUserId();
+            var userConfig = db.UserConfigs.SingleOrDefault(c => c.UserId == userId);
 
-            return View(viewModel);
+            if (userConfig == null)
+            {
+                userConfig = new UserConfig()
+                {
+                    User = db.Users.SingleOrDefault(u => u.Id == userId),
+                    TimeSpanDays = 30,
+                    SearchingDistance = 0.000001
+                };
+
+                db.UserConfigs.Add(userConfig);
+
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (DbEntityValidationException ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                }
+
+            }
+
+            return View(userConfig);
         }
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult UpdateConfig(ManageConfigModel model)
+        public ActionResult UpdateConfig(UserConfig model)
         {
-            return View("ManageConfig");
+            var userId = User.Identity.GetUserId();
+            var configInDb = db.UserConfigs.SingleOrDefault(c => c.UserId == userId);
+
+            if (configInDb != null)
+            {
+                configInDb.SearchingDistance = model.SearchingDistance;
+                configInDb.TimeSpanDays = model.TimeSpanDays;
+                configInDb.TimeSpanHours = model.TimeSpanHours;
+                configInDb.TimeSpanMinutes = model.TimeSpanMinutes;
+
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (DbEntityValidationException ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                }
+            }
+
+            return RedirectToAction("Index");
         }
 
         public ActionResult Delete(string id)

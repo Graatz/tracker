@@ -1068,4 +1068,51 @@ select:focus {
 .manage-tiles .manage-tile:hover {
   background-color: #0061f1;
 }
+
+.success-message {
+  width: 100%;
+  height: 51px;
+  background-color: #d6ffce;
+  border: 1px solid #a8f385;
+  border-radius: 5px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  padding: 10px;
+}
+
+.success-message p {
+  color: #4ead28;
+}
+
+.success-message .close-button {
+  width: 20px;
+  height: 20px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.success-message .close-button:after {
+  content: "\d7";
+  font-size: 20px;
+  color: #4ead28;
+  text-align: center;
+}
+
+.success-message .close-button:hover {
+  cursor: pointer;
+}
 /*# sourceMappingURL=style.css.map */

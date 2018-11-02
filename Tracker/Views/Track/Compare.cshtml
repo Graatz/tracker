@@ -1,6 +1,6 @@
 ﻿@model Tracker.Models.CompareViewModel
 @{
-    ViewBag.Title = "Track comparison";
+    ViewBag.Title = "Porównanie tras";
 }
 
 <div class="panel-group">
@@ -31,6 +31,17 @@
             </div>
         </div>
         <div id="map2" class="compare-map"></div>
+    </div>
+</div>
+
+<div class="panel-group">
+    <div class="panel">
+        <h2>Porównanie tras</h2>
+
+        <p>
+            Znaleziono @Model.Segments2.Count segmentów trasy @Html.ActionLink(Model.Track2.Name, "Details", new { id = Model.Track2.Id }, null) 
+            podobnych do trasy @Html.ActionLink(Model.Track2.Name, "Details", new { id = Model.Track2.Id }, null)
+        </p>
     </div>
 </div>
 

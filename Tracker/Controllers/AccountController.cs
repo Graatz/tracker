@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Tracker.Models;
+using System.Data.Entity.Validation;
 
 namespace Tracker.Controllers
 {
@@ -17,6 +18,7 @@ namespace Tracker.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         public AccountController()
         {
@@ -155,6 +157,24 @@ namespace Tracker.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    var userConfig = new UserConfig
+                    {
+                        User = db.Users.SingleOrDefault(u => u.Id == user.Id),
+                        TimeSpanDays = 30,
+                        SearchingDistance = 0.000001
+                    };
+
+                    db.UserConfigs.Add(userConfig);
+
+                    try
+                    {
+                        db.SaveChanges();
+                    }
+                    catch (DbEntityValidationException ex)
+                    {
+                        Console.WriteLine(ex.ToString());
+                    }
+
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771

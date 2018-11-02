@@ -272,13 +272,19 @@
     <Compile Include="Migrations\201807251342553_TrackTableUpdateStrava.Designer.cs">
       <DependentUpon>201807251342553_TrackTableUpdateStrava.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201811012335076_UserConfig.cs" />
+    <Compile Include="Migrations\201811012335076_UserConfig.Designer.cs">
+      <DependentUpon>201811012335076_UserConfig.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\ApplicationDbContext.cs" />
     <Compile Include="Models\HomeViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Track.cs" />
     <Compile Include="Models\TrackPoint.cs" />
+    <Compile Include="Models\UserConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Strava\DetailedActivity.cs" />
@@ -417,6 +423,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201807251342553_TrackTableUpdateStrava.resx">
       <DependentUpon>201807251342553_TrackTableUpdateStrava.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811012335076_UserConfig.resx">
+      <DependentUpon>201811012335076_UserConfig.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

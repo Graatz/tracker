@@ -27,18 +27,21 @@ namespace Tracker.Controllers
             return View();
         }
 
-        public ActionResult Index()
+        public ActionResult Index(string message)
         {
             var monthSpan = DateTime.Now.AddDays(-30);
             var userId = User.Identity.GetUserId();
 
             var viewModel = new Tracker.Models.IndexViewModel()
             {
-                Tracks = db.Tracks.Where(t => t.UserId.ToString() == userId).Where(t => t.UploadDate >= monthSpan).ToList(),
+                Tracks = db.Tracks.Where(t => t.UserId.ToString() == userId).Where(t => t.UploadDate >= monthSpan).ToList().OrderByDescending(t => t.UploadDate),
                 NumberOfTracks = db.Tracks.Count(),
                 NumberOfUsers = db.Users.Count(),
                 NumberOfTrackPoints = db.TrackPoints.Count()
             };
+
+            if (!string.IsNullOrEmpty(message))
+                ViewBag.StatusMessage = message;
 
             return View(viewModel);
         }

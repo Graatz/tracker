@@ -5,6 +5,14 @@
 
 <div class="panel-group">
     <div class="panel">
+        @if (ViewBag.StatusMessage != null)
+        {
+            <div class="success-message">
+                <p>@ViewBag.StatusMessage</p>
+                <div class="close-button"></div>
+            </div>
+        }
+
         <div class="app-stats">
             <div class="app-stat">
                 <p>@Model.NumberOfUsers</p>
@@ -47,7 +55,7 @@
             }
             else
             {
-                <p>Nie przesłane w tym miesiącu żadnej trasy</p>
+                <p>Nie przesłano w tym miesiącu żadnej trasy</p>
             }
         </div>
     </div>

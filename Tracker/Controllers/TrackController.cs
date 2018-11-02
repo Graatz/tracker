@@ -15,6 +15,7 @@ using RestSharp;
 using Tracker.Strava;
 using Newtonsoft.Json;
 using System.Text;
+using System.Data.Entity.Validation;
 
 namespace Tracker.Controllers
 {
@@ -119,7 +120,10 @@ namespace Tracker.Controllers
                                                           tp.TrackId != track.Id).Include(tp => tp.Track).ToList();
 
             // Filtering tracks which are close enough to the route
-            List<Track> filteredTracks = GeoLocation.GetTracksCloseToTrack(similarTrackPoints, trackPoints);
+            var userId = User.Identity.GetUserId();
+            var userConfig = db.UserConfigs.SingleOrDefault(c => c.UserId == userId);
+
+            List<Track> filteredTracks = GeoLocation.GetTracksCloseToTrack(similarTrackPoints, trackPoints, userConfig.SearchingDistance);
 
             var viewModel = new DetailsViewModel()
             {
@@ -133,16 +137,19 @@ namespace Tracker.Controllers
 
         public ViewResult Compare(int trackId1, int trackId2)
         {
+            var userId = User.Identity.GetUserId();
+            var userConfig = db.UserConfigs.SingleOrDefault(c => c.UserId == userId);
+
             // Fetching tracks from database
             List<TrackPoint> trackPoints1 = db.TrackPoints.Where(tp => tp.TrackId == trackId1).OrderBy(tp => tp.Index).ToList();
             List<TrackPoint> trackPoints2 = db.TrackPoints.Where(tp => tp.TrackId == trackId2).OrderBy(tp => tp.Index).ToList();
             List<List<TrackPoint>> segmenty = GeoLocation.SplitToSegments(trackPoints2);
 
             // Filtering track2 points similar to track1
-            List<TrackPoint> similarToTrack1 = GeoLocation.GetPointsCloseToTrack(trackPoints2, trackPoints1).OrderBy(tp => tp.Index).ToList();
+            List<TrackPoint> similarToTrack1 = GeoLocation.GetPointsCloseToTrack(trackPoints2, trackPoints1, userConfig.SearchingDistance).OrderBy(tp => tp.Index).ToList();
 
             // Filtering track1 points similar to track2 filtered points
-            List<TrackPoint> similarToFilteredTrack2 = GeoLocation.GetPointsCloseToTrack(trackPoints1, similarToTrack1).OrderBy(tp => tp.Index).ToList();
+            List<TrackPoint> similarToFilteredTrack2 = GeoLocation.GetPointsCloseToTrack(trackPoints1, similarToTrack1, userConfig.SearchingDistance).OrderBy(tp => tp.Index).ToList();
 
             List<List<TrackPoint>> trackSegments1 = new List<List<TrackPoint>>();
             trackSegments1.Add(db.TrackPoints.Where(tp => tp.TrackId == trackId1).OrderBy(tp => tp.Index).ToList());
@@ -164,16 +171,26 @@ namespace Tracker.Controllers
         public ActionResult ImportStravaTracks(ImportConfirmationViewModel model)
         {
             StravaTrackHandler stravaTrackHandler = new StravaTrackHandler(db);
+            string statusMessage = "";
 
             foreach (var detailedActivity in model.DetailedActivities)
             {
                 if (detailedActivity.Import)
                 {
-                    stravaTrackHandler.SetTrackData(detailedActivity);
+                    try 
+                    {
+                        stravaTrackHandler.SetTrackData(detailedActivity);
+                    }
+                    catch (DbEntityValidationException ex)
+                    {
+                        statusMessage = "Coś poszło nie tak podczas importowania trasy " + detailedActivity.Name + " z aplikacji Strava";
+                        return RedirectToAction("Index", "Home", new { message = statusMessage });
+                    }
                 }
             }
 
-            return RedirectToAction("Index", "Home");
+            statusMessage = "Udało się zaimportować " + model.DetailedActivities.Where(a => a.Import == true).Count() + " tras z aplikacji Strava";
+            return RedirectToAction("Index", "Home", new { message = statusMessage });
         }
 
         [HttpPost]
@@ -186,10 +203,15 @@ namespace Tracker.Controllers
             DefaultTrackHandler defaultTrackHandler = new DefaultTrackHandler(db);
             GpxParser parser = new GpxParser();
 
+            string statusMessage = "";
+
             foreach (var postedFile in postedFiles)
             {
                 if (postedFile == null)
-                    return HttpNotFound();
+                {
+                    statusMessage = "Coś poszło nie tak podczas przetwarzania pliku " + postedFile.FileName;
+                    return RedirectToAction("Index", "Home", new { message = statusMessage });
+                }
 
                 //string path = Server.MapPath("~/UploadedFiles/");
 
@@ -197,7 +219,8 @@ namespace Tracker.Controllers
                 defaultTrackHandler.SetTrackData(model.Name + " (" + postedFile.FileName + ")", model.Description, trkpts);
             }
 
-            return RedirectToAction("Index", "Home");
+            statusMessage = "Udało się przesłać " + postedFiles.Length + " nowych tras";
+            return RedirectToAction("Index", "Home", new { message = statusMessage });
         }
 
         public ViewResult Authorization(string code)
