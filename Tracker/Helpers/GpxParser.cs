@@ -15,7 +15,7 @@ namespace Tracker.Helpers
 
         }
 
-        public List<TrackPoint> LoadGPXTracks(Stream file)
+        public List<TrackPoint> StreamToTrackPoints(Stream file)
         {
             XDocument gpxDoc = XDocument.Load(file);
             XNamespace gpx = XNamespace.Get("http://www.topografix.com/GPX/1/1");

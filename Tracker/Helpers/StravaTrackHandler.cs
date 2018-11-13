@@ -17,7 +17,7 @@ namespace Tracker.Helpers
 
         public bool SetTrackData(DetailedActivity detailedActivity)
         {
-            var trackPoints = GeoLocation.DecodePolylinePoints(detailedActivity.Map.Polyline);
+            var trackPoints = GeoMath.DecodePolylinePoints(detailedActivity.Map.Polyline);
 
             if (trackPoints.Count <= 1)
                 return false;
@@ -45,8 +45,8 @@ namespace Tracker.Helpers
             track.MaxLongitude = trackPoints.Max(tp => tp.Longitude);
             track.Distance = (float)(detailedActivity.Distance / 1000);
             track.AvarageSpeed = detailedActivity.AverageSpeed * 3.6f;
-            track.StartLocation = GeoLocation.ReversedGeoLocation(trackPoints[0].Latitude, trackPoints[0].Longitude);
-            track.EndLocation = GeoLocation.ReversedGeoLocation(trackPoints[trackPoints.Count - 1].Latitude, trackPoints[trackPoints.Count - 1].Longitude);
+            track.StartLocation = GeoMath.ReversedGeoLocation(trackPoints[0].Latitude, trackPoints[0].Longitude);
+            track.EndLocation = GeoMath.ReversedGeoLocation(trackPoints[trackPoints.Count - 1].Latitude, trackPoints[trackPoints.Count - 1].Longitude);
             track.TrackDate = trackPoints[0].Date;
 
             AddTrackToDb(track, trackPoints);

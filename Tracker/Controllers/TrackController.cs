@@ -119,7 +119,7 @@ namespace Tracker.Controllers
                                                           tp.TrackId != track.Id).Include(tp => tp.Track).ToList();
 
             // Filtering tracks which are close enough to the route
-            List<Track> filteredTracks = GeoLocation.GetTracksCloseToTrack(similarTrackPoints, trackPoints);
+            List<Track> filteredTracks = GeoMath.GetTracksCloseToTrack(similarTrackPoints, trackPoints);
 
             var viewModel = new DetailsViewModel()
             {
@@ -136,17 +136,17 @@ namespace Tracker.Controllers
             // Fetching tracks from database
             List<TrackPoint> trackPoints1 = db.TrackPoints.Where(tp => tp.TrackId == trackId1).OrderBy(tp => tp.Index).ToList();
             List<TrackPoint> trackPoints2 = db.TrackPoints.Where(tp => tp.TrackId == trackId2).OrderBy(tp => tp.Index).ToList();
-            List<List<TrackPoint>> segmenty = GeoLocation.SplitToSegments(trackPoints2);
+            List<List<TrackPoint>> segmenty = GeoMath.SplitToSegments(trackPoints2);
 
             // Filtering track2 points similar to track1
-            List<TrackPoint> similarToTrack1 = GeoLocation.GetPointsCloseToTrack(trackPoints2, trackPoints1).OrderBy(tp => tp.Index).ToList();
+            List<TrackPoint> similarToTrack1 = GeoMath.GetPointsCloseToTrack(trackPoints2, trackPoints1).OrderBy(tp => tp.Index).ToList();
 
             // Filtering track1 points similar to track2 filtered points
-            List<TrackPoint> similarToFilteredTrack2 = GeoLocation.GetPointsCloseToTrack(trackPoints1, similarToTrack1).OrderBy(tp => tp.Index).ToList();
+            List<TrackPoint> similarToFilteredTrack2 = GeoMath.GetPointsCloseToTrack(trackPoints1, similarToTrack1).OrderBy(tp => tp.Index).ToList();
 
             List<List<TrackPoint>> trackSegments1 = new List<List<TrackPoint>>();
             trackSegments1.Add(db.TrackPoints.Where(tp => tp.TrackId == trackId1).OrderBy(tp => tp.Index).ToList());
-            List<List<TrackPoint>> trackSegments2 = GeoLocation.SplitToSegments(similarToTrack1);
+            List<List<TrackPoint>> trackSegments2 = GeoMath.SplitToSegments(similarToTrack1);
 
             var viewModel = new CompareViewModel()
             {
@@ -193,8 +193,9 @@ namespace Tracker.Controllers
 
                 //string path = Server.MapPath("~/UploadedFiles/");
 
-                List<TrackPoint> trkpts = parser.LoadGPXTracks(postedFile.InputStream);
-                defaultTrackHandler.SetTrackData(model.Name + " (" + postedFile.FileName + ")", model.Description, trkpts);
+                List<TrackPoint> trkpts = parser.StreamToTrackPoints(postedFile.InputStream);
+                if (!defaultTrackHandler.SetTrackData(model.Name + " (" + postedFile.FileName + ")", model.Description, trkpts))
+                    return HttpNotFound();
             }
 
             return RedirectToAction("Index", "Home");

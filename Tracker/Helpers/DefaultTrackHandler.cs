@@ -27,7 +27,8 @@ namespace Tracker.Helpers
                 Name = name,
                 Description = description,
                 User = db.Users.SingleOrDefault(u => u.Id == userId),
-                UploadDate = DateTime.Now
+                UploadDate = DateTime.Now,
+                TrackDate = trackPoints[0].Date
             };
 
             for (int i = 0; i < trackPoints.Count; i++)
@@ -40,10 +41,10 @@ namespace Tracker.Helpers
             track.MinLongitude = trackPoints.Min(tp => tp.Longitude);
             track.MaxLatitude = trackPoints.Max(tp => tp.Latitude);
             track.MaxLongitude = trackPoints.Max(tp => tp.Longitude);
-            track.Distance = GeoLocation.CalculateTrackDistance(trackPoints);
-            track.AvarageSpeed = GeoLocation.CalculateAvarageTrackSpeed(trackPoints);
-            track.StartLocation = GeoLocation.ReversedGeoLocation(trackPoints[0].Latitude, trackPoints[0].Longitude);
-            track.EndLocation = GeoLocation.ReversedGeoLocation(trackPoints[trackPoints.Count - 1].Latitude, trackPoints[trackPoints.Count - 1].Longitude);
+            track.Distance = GeoMath.CalculateTrackDistance(trackPoints);
+            track.AvarageSpeed = GeoMath.CalculateAvarageTrackSpeed(trackPoints);
+            track.StartLocation = GeoMath.ReversedGeoLocation(trackPoints[0].Latitude, trackPoints[0].Longitude);
+            track.EndLocation = GeoMath.ReversedGeoLocation(trackPoints[trackPoints.Count - 1].Latitude, trackPoints[trackPoints.Count - 1].Longitude);
             track.TrackDate = trackPoints[0].Date;
 
             AddTrackToDb(track, trackPoints);
