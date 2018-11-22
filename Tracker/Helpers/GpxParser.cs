@@ -15,9 +15,9 @@ namespace Tracker.Helpers
 
         }
 
-        public List<TrackPoint> LoadGPXTracks(Stream file)
+        public List<TrackPoint> StreamToTrackPoints(Stream fileStream)
         {
-            XDocument gpxDoc = XDocument.Load(file);
+            XDocument gpxDoc = XDocument.Load(fileStream);
             XNamespace gpx = XNamespace.Get("http://www.topografix.com/GPX/1/1");
 
             List<TrackPoint> points = new List<TrackPoint>();
@@ -37,6 +37,7 @@ namespace Tracker.Helpers
                 }
                 catch (Exception ex)
                 {
+                    Console.WriteLine(ex.ToString());
                     date = DateTime.Now;
                 }
 

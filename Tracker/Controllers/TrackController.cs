@@ -52,23 +52,7 @@ namespace Tracker.Controllers
             return View(model);
         }
 
-        public ActionResult Tracks(TrackSearchModel searchModel)
-        {
-            var result = GetTracks(searchModel);
-
-            var viewModel = new ListTracksViewModel()
-            {
-                NumberOfTracks = result.Count(),
-                Tracks = result.Include(t => t.User).OrderByDescending(t => t.UploadDate).Take(10).ToList(),
-                CurrentPage = 1,
-                StartingIndex = 0,
-                NumberOfTracksPerPage = 10
-            };
-
-            return View(viewModel);
-        }
-        
-        public ActionResult TracksPage(int startingIndex, TrackSearchModel searchModel)
+        public ActionResult Tracks(int startingIndex, TrackSearchModel searchModel)
         {
             var result = GetTracks(searchModel);
 
@@ -77,11 +61,11 @@ namespace Tracker.Controllers
                 NumberOfTracks = result.Count(),
                 Tracks = result.Include(t => t.User).OrderByDescending(t => t.UploadDate).Skip(startingIndex).Take(10).ToList(),
                 CurrentPage = (startingIndex / 10) + 1,
-                StartingIndex = startingIndex,
+                StartingIndex = 0,
                 NumberOfTracksPerPage = 10
             };
 
-            return View("Tracks", viewModel);
+            return View(viewModel);
         }
 
         public IQueryable<Track> GetTracks(TrackSearchModel searchModel)
@@ -123,7 +107,7 @@ namespace Tracker.Controllers
             var userId = User.Identity.GetUserId();
             var userConfig = db.UserConfigs.SingleOrDefault(c => c.UserId == userId);
 
-            List<Track> filteredTracks = GeoLocation.GetTracksCloseToTrack(similarTrackPoints, trackPoints, userConfig.SearchingDistance);
+            List<Track> filteredTracks = GeoMath.GetTracksCloseToTrack(similarTrackPoints, trackPoints, userConfig.SearchingDistance);
 
             var viewModel = new DetailsViewModel()
             {
@@ -143,17 +127,17 @@ namespace Tracker.Controllers
             // Fetching tracks from database
             List<TrackPoint> trackPoints1 = db.TrackPoints.Where(tp => tp.TrackId == trackId1).OrderBy(tp => tp.Index).ToList();
             List<TrackPoint> trackPoints2 = db.TrackPoints.Where(tp => tp.TrackId == trackId2).OrderBy(tp => tp.Index).ToList();
-            List<List<TrackPoint>> segmenty = GeoLocation.SplitToSegments(trackPoints2);
+            List<List<TrackPoint>> segmenty = GeoMath.SplitToSegments(trackPoints2);
 
             // Filtering track2 points similar to track1
-            List<TrackPoint> similarToTrack1 = GeoLocation.GetPointsCloseToTrack(trackPoints2, trackPoints1, userConfig.SearchingDistance).OrderBy(tp => tp.Index).ToList();
+            List<TrackPoint> similarToTrack1 = GeoMath.GetPointsCloseToTrack(trackPoints2, trackPoints1, userConfig.SearchingDistance).OrderBy(tp => tp.Index).ToList();
 
             // Filtering track1 points similar to track2 filtered points
-            List<TrackPoint> similarToFilteredTrack2 = GeoLocation.GetPointsCloseToTrack(trackPoints1, similarToTrack1, userConfig.SearchingDistance).OrderBy(tp => tp.Index).ToList();
+            List<TrackPoint> similarToFilteredTrack2 = GeoMath.GetPointsCloseToTrack(trackPoints1, similarToTrack1, userConfig.SearchingDistance).OrderBy(tp => tp.Index).ToList();
 
             List<List<TrackPoint>> trackSegments1 = new List<List<TrackPoint>>();
             trackSegments1.Add(db.TrackPoints.Where(tp => tp.TrackId == trackId1).OrderBy(tp => tp.Index).ToList());
-            List<List<TrackPoint>> trackSegments2 = GeoLocation.SplitToSegments(similarToTrack1);
+            List<List<TrackPoint>> trackSegments2 = GeoMath.SplitToSegments(similarToTrack1);
 
             var viewModel = new CompareViewModel()
             {
@@ -215,8 +199,13 @@ namespace Tracker.Controllers
 
                 //string path = Server.MapPath("~/UploadedFiles/");
 
-                List<TrackPoint> trkpts = parser.LoadGPXTracks(postedFile.InputStream);
-                defaultTrackHandler.SetTrackData(model.Name + " (" + postedFile.FileName + ")", model.Description, trkpts);
+                List<TrackPoint> trkpts = parser.StreamToTrackPoints(postedFile.InputStream);
+
+                if (!defaultTrackHandler.SetTrackData(model.Name + " (" + postedFile.FileName + ")", model.Description, trkpts))
+                {
+                    statusMessage = "Coś poszło nie tak podczas przetwarzania ustawiania danych trasy";
+                    return RedirectToAction("Index", "Home", new { message = statusMessage });
+                }
             }
 
             statusMessage = "Udało się przesłać " + postedFiles.Length + " nowych tras";

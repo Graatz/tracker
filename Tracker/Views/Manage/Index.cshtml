@@ -5,7 +5,13 @@
 
 <div class="panel-group">
     <div class="panel">
-        <p class="success-message">@ViewBag.StatusMessage</p>
+        @if (ViewBag.StatusMessage != null)
+        {
+            <div class="success-message">
+                <p>@ViewBag.StatusMessage</p>
+                <div class="close-button"></div>
+            </div>
+        }
         <h2>@ViewBag.Title</h2>
 
         <div class="manage-tiles">

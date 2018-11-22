@@ -18,7 +18,7 @@ namespace Tracker.Helpers
         }
     }
 
-    public static class GeoLocation
+    public static class GeoMath
     {
         public static string ReversedGeoLocation(double lat, double lng)
         {

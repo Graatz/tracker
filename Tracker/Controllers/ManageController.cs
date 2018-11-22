@@ -140,7 +140,7 @@ namespace Tracker.Controllers
                 : message == ManageMessageId.Error ? "Wystąpił błąd."
                 : message == ManageMessageId.AddPhoneSuccess ? "Dodano numer telefonu."
                 : message == ManageMessageId.RemovePhoneSuccess ? "Usunięto numer telefonu."
-                : "";
+                : null;
 
             var userId = User.Identity.GetUserId();
             var model = new ManageIndexViewModel

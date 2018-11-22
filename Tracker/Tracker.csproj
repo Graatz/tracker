@@ -220,7 +220,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\DefaultTrackHandler.cs" />
-    <Compile Include="Helpers\GeoLocation.cs" />
+    <Compile Include="Helpers\GeoMath.cs" />
     <Compile Include="Helpers\GpxParser.cs" />
     <Compile Include="Helpers\StravaTrackHandler.cs" />
     <Compile Include="Helpers\TrackHandler.cs" />

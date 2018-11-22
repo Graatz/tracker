@@ -10,6 +10,7 @@ using Tracker.Helpers;
 using System.Diagnostics;
 using Microsoft.AspNet.Identity.Owin;
 using System.Net;
+using System.Data.Entity;
 
 namespace Tracker.Controllers
 {
@@ -27,17 +28,30 @@ namespace Tracker.Controllers
             return View();
         }
 
-        public ActionResult Index(string message)
+        public ActionResult Index(string message, int startingIndex = 0)
         {
             var monthSpan = DateTime.Now.AddDays(-30);
             var userId = User.Identity.GetUserId();
 
-            var viewModel = new Tracker.Models.IndexViewModel()
+            var result = db.Tracks.Where(t => t.UserId.ToString() == userId)
+                .Where(t => t.UploadDate >= monthSpan)
+                .Include(t => t.User)
+                .OrderByDescending(t => t.UploadDate)
+                .Skip(startingIndex)
+                .Take(10)
+                .ToList();
+
+            var viewModel = new IndexViewModel()
             {
-                Tracks = db.Tracks.Where(t => t.UserId.ToString() == userId).Where(t => t.UploadDate >= monthSpan).ToList().OrderByDescending(t => t.UploadDate),
-                NumberOfTracks = db.Tracks.Count(),
-                NumberOfUsers = db.Users.Count(),
-                NumberOfTrackPoints = db.TrackPoints.Count()
+                TracksTotal = db.Tracks.Count(),
+                UsersTotal = db.Users.Count(),
+                TrackPointsTotal = db.TrackPoints.Count(),
+
+                NumberOfTracks = db.Tracks.Where(t => t.UserId.ToString() == userId).Where(t => t.UploadDate >= monthSpan).Count(),
+                Tracks = result,
+                CurrentPage = (startingIndex / 10) + 1,
+                StartingIndex = 0,
+                NumberOfTracksPerPage = 10
             };
 
             if (!string.IsNullOrEmpty(message))
