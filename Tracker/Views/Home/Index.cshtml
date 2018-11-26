@@ -44,7 +44,7 @@
             @foreach (var track in Model.Tracks)
             {
                 <div class="track-card">
-                    @Html.ActionLink(@track.Name, "Details", new { id = track.Id }, null)
+                    @Html.ActionLink(@track.Name, "Details", "Track", new { id = track.Id }, null)
                     <div class="track-card-row">
                         <p><span>Data dodania:</span> @track.UploadDate</p>
                     </div>
