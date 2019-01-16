@@ -13,5 +13,46 @@ namespace Tracker.Helpers
         {
 
         }
+<<<<<<< HEAD
+=======
+
+        public bool SetTrackData(string name, string description, List<TrackPoint> trackPoints)
+        {
+            if (trackPoints.Count <= 1)
+                return false;
+
+            var userName = HttpContext.Current.User.Identity.GetUserName();
+            var userId = HttpContext.Current.User.Identity.GetUserId().ToString();
+
+            Track track = new Track()
+            {
+                Name = name,
+                Description = description,
+                User = db.Users.SingleOrDefault(u => u.Id == userId),
+                UploadDate = DateTime.Now,
+                TrackDate = trackPoints[0].Date
+            };
+
+            for (int i = 0; i < trackPoints.Count; i++)
+            {
+                trackPoints[i].Track = track;
+                trackPoints[i].Index = i;
+            }
+
+            track.MinLatitude = trackPoints.Min(tp => tp.Latitude);
+            track.MinLongitude = trackPoints.Min(tp => tp.Longitude);
+            track.MaxLatitude = trackPoints.Max(tp => tp.Latitude);
+            track.MaxLongitude = trackPoints.Max(tp => tp.Longitude);
+            track.Distance = GeoMath.CalculateTrackDistance(trackPoints);
+            track.AvarageSpeed = GeoMath.CalculateAvarageTrackSpeed(trackPoints);
+            track.StartLocation = GeoMath.ReversedGeoLocation(trackPoints[0].Latitude, trackPoints[0].Longitude);
+            track.EndLocation = GeoMath.ReversedGeoLocation(trackPoints[trackPoints.Count - 1].Latitude, trackPoints[trackPoints.Count - 1].Longitude);
+            track.TrackDate = trackPoints[0].Date;
+
+            AddTrackToDb(track, trackPoints);
+
+            return true;
+        }
+>>>>>>> 857db886105b0c99bcffde990678e1ebee4e99c3
     }
 }

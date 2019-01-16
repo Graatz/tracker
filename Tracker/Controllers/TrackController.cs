@@ -102,7 +102,14 @@ namespace Tracker.Controllers
             var track = trackService.GetTrackById(id);
             var similarTracks = trackService.GetTracksSimilarToTrack(track.Id);
 
+<<<<<<< HEAD
             var viewModel = new SimilarTracksViewModel()
+=======
+            // Filtering tracks which are close enough to the route
+            List<Track> filteredTracks = GeoMath.GetTracksCloseToTrack(similarTrackPoints, trackPoints);
+
+            var viewModel = new DetailsViewModel()
+>>>>>>> 857db886105b0c99bcffde990678e1ebee4e99c3
             {
                 Track = track,
                 SimilarTracks = similarTracks
@@ -113,12 +120,22 @@ namespace Tracker.Controllers
 
         public ViewResult Compare(int trackId1, int trackId2)
         {
+<<<<<<< HEAD
             var similarToTrack1 = trackService.GetTrackPointsSimilarToTrack(trackId1, trackId2);
 
             var trackPoints = trackService.GetTrackPointsByTrackId(trackId1);
             var trackPoints2 = trackService.GetTrackPointsByTrackId(trackId2);
             var track1 = trackService.GetTrackById(trackId1);
             var track2 = trackService.GetTrackById(trackId2);
+=======
+            // Fetching tracks from database
+            List<TrackPoint> trackPoints1 = db.TrackPoints.Where(tp => tp.TrackId == trackId1).OrderBy(tp => tp.Index).ToList();
+            List<TrackPoint> trackPoints2 = db.TrackPoints.Where(tp => tp.TrackId == trackId2).OrderBy(tp => tp.Index).ToList();
+            List<List<TrackPoint>> segmenty = GeoMath.SplitToSegments(trackPoints2);
+
+            // Filtering track2 points similar to track1
+            List<TrackPoint> similarToTrack1 = GeoMath.GetPointsCloseToTrack(trackPoints2, trackPoints1).OrderBy(tp => tp.Index).ToList();
+>>>>>>> 857db886105b0c99bcffde990678e1ebee4e99c3
 
             TrackDTO track1DTO = AutoMapper.Mapper.Map<Track, TrackDTO>(track1);
             TrackDTO track2DTO = AutoMapper.Mapper.Map<Track, TrackDTO>(track2);
@@ -126,6 +143,7 @@ namespace Tracker.Controllers
             List<TrackPointDTO> trackPointsDTO = AutoMapper.Mapper.Map<List<TrackPoint>, List<TrackPointDTO>>(trackPoints);
             List<TrackPointDTO> trackPoints2DTO = AutoMapper.Mapper.Map<List<TrackPoint>, List<TrackPointDTO>>(trackPoints2);
             // Filtering track1 points similar to track2 filtered points
+<<<<<<< HEAD
 
             var trackSegments1Data = trackService.GetTrackPointsByTrackId(trackId1);
             var trackSegments1DTO = AutoMapper.Mapper.Map<List<TrackPoint>, List<TrackPointDTO>>(trackSegments1Data);
@@ -136,6 +154,13 @@ namespace Tracker.Controllers
 
             List<TrackSegment> trackSegments2 = GeoMath.SplitToSegments(similarToTrack1);
 
+=======
+            List<TrackPoint> similarToFilteredTrack2 = GeoMath.GetPointsCloseToTrack(trackPoints1, similarToTrack1).OrderBy(tp => tp.Index).ToList();
+
+            List<List<TrackPoint>> trackSegments1 = new List<List<TrackPoint>>();
+            trackSegments1.Add(db.TrackPoints.Where(tp => tp.TrackId == trackId1).OrderBy(tp => tp.Index).ToList());
+            List<List<TrackPoint>> trackSegments2 = GeoMath.SplitToSegments(similarToTrack1);
+>>>>>>> 857db886105b0c99bcffde990678e1ebee4e99c3
 
             var viewModel = new CompareViewModel()
             {
@@ -164,7 +189,33 @@ namespace Tracker.Controllers
             {
                 List<TrackPoint> trackPoints = parser.Parse(postedFile.InputStream);
 
+<<<<<<< HEAD
                 if (!trackService.AddTrack(model, trackPoints))
+=======
+                //string path = Server.MapPath("~/UploadedFiles/");
+
+                List<TrackPoint> trkpts = parser.StreamToTrackPoints(postedFile.InputStream);
+                if (!defaultTrackHandler.SetTrackData(model.Name + " (" + postedFile.FileName + ")", model.Description, trkpts))
+                    return HttpNotFound();
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        public ViewResult Authorization(string code)
+        {
+            if (code != null)
+            {
+                StravaClient StravaClient = new StravaClient();
+                StravaAuthenticationResponse response = StravaClient.GetAccessToken(code);
+
+                Session["access_token"] = response.AccessToken;
+
+                var activities = StravaClient.GetAthleteActivities();
+
+                List<DetailedActivity> importedActivities = new List<DetailedActivity>();
+                foreach (var activity in activities)
+>>>>>>> 857db886105b0c99bcffde990678e1ebee4e99c3
                 {
                     statusMessage = "Coś poszło nie tak podczas przetwarzania pliku " + postedFile.FileName;
                     return RedirectToAction("Index", "Home", new { message = statusMessage });

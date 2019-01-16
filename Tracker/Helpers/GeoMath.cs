@@ -119,13 +119,10 @@ namespace Tracker.Helpers
                     minLongitude = route[i].Longitude - distance;
                 }
 
-                var similarTrackPoints = points.Where(
-                    tp =>
-                    tp.Latitude >= minLatitude &&
+                var similarTrackPoints = points.Where(tp => tp.Latitude >= minLatitude &&
                     tp.Latitude <= maxLatitude &&
                     tp.Longitude >= minLongitude &&
-                    tp.Longitude <= maxLongitude &&
-                    tp.TrackId != route[i].TrackId).ToList();
+                    tp.Longitude <= maxLongitude).ToList();
 
                 for (int j = 0; j < similarTrackPoints.Count - 1; j+=2)
                 {
@@ -140,7 +137,7 @@ namespace Tracker.Helpers
                     {
                         closeTracks.Add(similarTrackPoints[j].Track);
                         points.RemoveAll(tp => tp.TrackId == similarTrackPoints[j].TrackId);
-                        similarTrackPoints.RemoveAll(tp => tp.TrackId == closeTracks[closeTracks.Count-1].Id);
+                        similarTrackPoints.RemoveAll(tp => tp.TrackId == similarTrackPoints[j].TrackId);
                     }
                 }
 
