@@ -1,0 +1,38 @@
+﻿@model Tracker.Models.SimilarTracksViewModel
+@{
+    ViewBag.Title = "Podobne trasy";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="panel-group">
+    <div class="panel">
+        <h2>Trasy podobne do: @Html.ActionLink(Model.Track.Name + " (" + Model.SimilarTracks.Count + ")", "Details", new { id = Model.Track.Id }, null)</h2>
+        @if (Model.SimilarTracks.Count > 0)
+        {
+            <div class="track-cards">
+                @foreach (var similarTrack in Model.SimilarTracks)
+                {
+                    <div class="track-card">
+                        @Html.ActionLink(@similarTrack.Name, "Compare", new { trackId1 = Model.Track.Id, trackId2 = similarTrack.Id}, null)
+                        <div class="track-card-row">
+                            <p><span>Data dodania:</span> @similarTrack.UploadDate</p>
+                        </div>
+                        <div class="track-card-row">
+                            <p><span>Start:</span> @similarTrack.StartLocation</p>
+                            <p><span>Koniec:</span> @similarTrack.EndLocation</p>
+                        </div>
+                        <div class="track-card-row">
+                            <p><span>Dystans:</span> @Math.Round(similarTrack.Distance, 2) km</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="no-tracks-available-info">
+                <p>Nie znaleziono podobnych tras</p>
+            </div>
+        }
+    </div>
+</div>

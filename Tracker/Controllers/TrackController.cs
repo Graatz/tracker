@@ -8,21 +8,31 @@ using System.Web.Mvc;
 using Tracker.Models;
 using Microsoft.AspNet.Identity;
 using Tracker.Helpers;
-using System.Diagnostics;
-using Microsoft.AspNet.Identity.Owin;
 using System.Data.Entity;
-using RestSharp;
 using Tracker.Strava;
-using Newtonsoft.Json;
-using System.Text;
-using System.Data.Entity.Validation;
+using Tracker.DAL;
+using Tracker.Services;
+using Tracker.DTO;
+using AutoMapper;
 
 namespace Tracker.Controllers
 {
-
     public class TrackController : Controller
     {
-        protected ApplicationDbContext db = new ApplicationDbContext();
+        private ITrackService trackService;
+
+        public TrackController(ITrackService trackService)
+        {
+            this.trackService = trackService;
+        }
+
+        [Authorize(Roles = "Admin")]
+        public ActionResult Delete(int id)
+        {
+            trackService.RemoveById(id);
+            
+            return RedirectToAction("TracksTable", "Admin");
+        }
 
         public ViewResult Search()
         {
@@ -33,9 +43,16 @@ namespace Tracker.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult FilterTracks(TrackSearchModel searchModel)
+        public ActionResult FilterTracks(int startingIndex = 0, TrackSearchModel searchModel = null)
         {
-            return RedirectToAction("Tracks", searchModel);
+            return RedirectToAction("ListTracks", new
+            {
+                startingIndex,
+                searchModel.Date,
+                searchModel.Name,
+                searchModel.Location,
+                searchModel.User
+            });
         }
 
         public ViewResult UploadForm()
@@ -45,24 +62,14 @@ namespace Tracker.Controllers
             return View(model);
         }
 
-        public ActionResult TracksTable()
+        public ActionResult ListTracks(int startingIndex = 0, TrackSearchModel searchModel = null)
         {
-            var model = db.Tracks.Include(t => t.User).OrderByDescending(t => t.UploadDate).ToList();
-
-            return View(model);
-        }
-
-        public ActionResult Tracks(int startingIndex, TrackSearchModel searchModel)
-        {
-            var result = GetTracks(searchModel);
+            var tracks = GetTracks(searchModel).Include(t => t.User).OrderByDescending(t => t.UploadDate);
 
             var viewModel = new ListTracksViewModel()
             {
-                NumberOfTracks = result.Count(),
-                Tracks = result.Include(t => t.User).OrderByDescending(t => t.UploadDate).Skip(startingIndex).Take(10).ToList(),
-                CurrentPage = (startingIndex / 10) + 1,
-                StartingIndex = 0,
-                NumberOfTracksPerPage = 10
+                Tracks = tracks.Skip(startingIndex).Take(10).ToList(),
+                PaginationViewModel = new PaginationViewModel("ListTracks", searchModel, tracks.Count(), 0, 10, startingIndex / 10)
             };
 
             return View(viewModel);
@@ -70,50 +77,35 @@ namespace Tracker.Controllers
 
         public IQueryable<Track> GetTracks(TrackSearchModel searchModel)
         {
-            var result = db.Tracks.AsQueryable();
-
-            if (searchModel != null)
-            {
-                if (!string.IsNullOrEmpty(searchModel.Name))
-                    result = result.Where(t => t.Name.Contains(searchModel.Name));
-                if (searchModel.Date.HasValue)
-                    result = result.Where(t => t.TrackDate.Equals(searchModel.Date));
-                if (!string.IsNullOrEmpty(searchModel.Location))
-                    result = result.Where(t => t.StartLocation.Contains(searchModel.Location) || t.EndLocation.Contains(searchModel.Location));
-                if (!string.IsNullOrEmpty(searchModel.User))
-                {
-                    var user = db.Users.SingleOrDefault(u => u.UserName.Equals(searchModel.User));
-                    if (user != null)
-                        result = result.Where(t => t.UserId == user.Id);
-                }
-            }
-
-            return result;
+            return trackService.GetTracksFromSearchModel(searchModel);
         }
 
         public ViewResult Details(int id)
         {
-            var track = db.Tracks.Include(t => t.User).SingleOrDefault(t => t.Id == id);
-            var trackPoints = db.TrackPoints.Where(tp => tp.TrackId == id).ToList();
+            var track = trackService.GetTrackById(id);
+            var trackPoints = trackService.GetTrackPointsByTrackId(id);
 
-            // Getting tracks in min, max distance
-            var similarTrackPoints = db.TrackPoints.Where(tp => tp.Latitude >= track.MinLatitude &&
-                                                          tp.Latitude <= track.MaxLatitude &&
-                                                          tp.Longitude >= track.MinLongitude &&
-                                                          tp.Longitude <= track.MaxLongitude &&
-                                                          tp.TrackId != track.Id).Include(tp => tp.Track).ToList();
-
-            // Filtering tracks which are close enough to the route
-            var userId = User.Identity.GetUserId();
-            var userConfig = db.UserConfigs.SingleOrDefault(c => c.UserId == userId);
-
-            List<Track> filteredTracks = GeoMath.GetTracksCloseToTrack(similarTrackPoints, trackPoints, userConfig.SearchingDistance);
+            TrackDTO trackDTO = AutoMapper.Mapper.Map<Track, TrackDTO>(track);
+            List<TrackPointDTO> trackPointsDTO = AutoMapper.Mapper.Map<List<TrackPoint>, List<TrackPointDTO>>(trackPoints);
 
             var viewModel = new DetailsViewModel()
             {
+                Track = trackDTO,
+                TrackPoints = trackPointsDTO
+            };
+
+            return View(viewModel);
+        }
+
+        public ActionResult SimilarTracks(int id)
+        {
+            var track = trackService.GetTrackById(id);
+            var similarTracks = trackService.GetTracksSimilarToTrack(track.Id);
+
+            var viewModel = new SimilarTracksViewModel()
+            {
                 Track = track,
-                TrackPoints = trackPoints,
-                SimilarTracks = filteredTracks,
+                SimilarTracks = similarTracks
             };
 
             return View(viewModel);
@@ -121,28 +113,35 @@ namespace Tracker.Controllers
 
         public ViewResult Compare(int trackId1, int trackId2)
         {
-            var userId = User.Identity.GetUserId();
-            var userConfig = db.UserConfigs.SingleOrDefault(c => c.UserId == userId);
+            var similarToTrack1 = trackService.GetTrackPointsSimilarToTrack(trackId1, trackId2);
 
-            // Fetching tracks from database
-            List<TrackPoint> trackPoints1 = db.TrackPoints.Where(tp => tp.TrackId == trackId1).OrderBy(tp => tp.Index).ToList();
-            List<TrackPoint> trackPoints2 = db.TrackPoints.Where(tp => tp.TrackId == trackId2).OrderBy(tp => tp.Index).ToList();
-            List<List<TrackPoint>> segmenty = GeoMath.SplitToSegments(trackPoints2);
+            var trackPoints = trackService.GetTrackPointsByTrackId(trackId1);
+            var trackPoints2 = trackService.GetTrackPointsByTrackId(trackId2);
+            var track1 = trackService.GetTrackById(trackId1);
+            var track2 = trackService.GetTrackById(trackId2);
 
-            // Filtering track2 points similar to track1
-            List<TrackPoint> similarToTrack1 = GeoMath.GetPointsCloseToTrack(trackPoints2, trackPoints1, userConfig.SearchingDistance).OrderBy(tp => tp.Index).ToList();
+            TrackDTO track1DTO = AutoMapper.Mapper.Map<Track, TrackDTO>(track1);
+            TrackDTO track2DTO = AutoMapper.Mapper.Map<Track, TrackDTO>(track2);
 
+            List<TrackPointDTO> trackPointsDTO = AutoMapper.Mapper.Map<List<TrackPoint>, List<TrackPointDTO>>(trackPoints);
+            List<TrackPointDTO> trackPoints2DTO = AutoMapper.Mapper.Map<List<TrackPoint>, List<TrackPointDTO>>(trackPoints2);
             // Filtering track1 points similar to track2 filtered points
-            List<TrackPoint> similarToFilteredTrack2 = GeoMath.GetPointsCloseToTrack(trackPoints1, similarToTrack1, userConfig.SearchingDistance).OrderBy(tp => tp.Index).ToList();
 
-            List<List<TrackPoint>> trackSegments1 = new List<List<TrackPoint>>();
-            trackSegments1.Add(db.TrackPoints.Where(tp => tp.TrackId == trackId1).OrderBy(tp => tp.Index).ToList());
-            List<List<TrackPoint>> trackSegments2 = GeoMath.SplitToSegments(similarToTrack1);
+            var trackSegments1Data = trackService.GetTrackPointsByTrackId(trackId1);
+            var trackSegments1DTO = AutoMapper.Mapper.Map<List<TrackPoint>, List<TrackPointDTO>>(trackSegments1Data);
+            List<List<TrackPointDTO>> trackSegments1 = new List<List<TrackPointDTO>>
+            {
+                trackSegments1DTO
+            };
+
+            List<TrackSegment> trackSegments2 = GeoMath.SplitToSegments(similarToTrack1);
+
 
             var viewModel = new CompareViewModel()
             {
-                Track1 = db.Tracks.SingleOrDefault(t => t.Id == trackId1),
-                Track2 = db.Tracks.SingleOrDefault(t => t.Id == trackId2),
+                Track1 = track1DTO,
+                Track2 = track2DTO,
+                Track2TrackPoints = trackPoints2DTO,
                 Segments1 = trackSegments1,
                 Segments2 = trackSegments2
             };
@@ -152,58 +151,22 @@ namespace Tracker.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ImportStravaTracks(ImportConfirmationViewModel model)
-        {
-            StravaTrackHandler stravaTrackHandler = new StravaTrackHandler(db);
-            string statusMessage = "";
-
-            foreach (var detailedActivity in model.DetailedActivities)
-            {
-                if (detailedActivity.Import)
-                {
-                    try 
-                    {
-                        stravaTrackHandler.SetTrackData(detailedActivity);
-                    }
-                    catch (DbEntityValidationException ex)
-                    {
-                        statusMessage = "Coś poszło nie tak podczas importowania trasy " + detailedActivity.Name + " z aplikacji Strava";
-                        return RedirectToAction("Index", "Home", new { message = statusMessage });
-                    }
-                }
-            }
-
-            statusMessage = "Udało się zaimportować " + model.DetailedActivities.Where(a => a.Import == true).Count() + " tras z aplikacji Strava";
-            return RedirectToAction("Index", "Home", new { message = statusMessage });
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult Upload(Track model, HttpPostedFileBase[] postedFiles)
         {
             if (!ModelState.IsValid || postedFiles.Length == 0)
                 return View("UploadForm");
 
-            DefaultTrackHandler defaultTrackHandler = new DefaultTrackHandler(db);
-            GpxParser parser = new GpxParser();
-
             string statusMessage = "";
+
+            GpxParser parser = new GpxParser();
 
             foreach (var postedFile in postedFiles)
             {
-                if (postedFile == null)
+                List<TrackPoint> trackPoints = parser.Parse(postedFile.InputStream);
+
+                if (!trackService.AddTrack(model, trackPoints))
                 {
                     statusMessage = "Coś poszło nie tak podczas przetwarzania pliku " + postedFile.FileName;
-                    return RedirectToAction("Index", "Home", new { message = statusMessage });
-                }
-
-                //string path = Server.MapPath("~/UploadedFiles/");
-
-                List<TrackPoint> trkpts = parser.StreamToTrackPoints(postedFile.InputStream);
-
-                if (!defaultTrackHandler.SetTrackData(model.Name + " (" + postedFile.FileName + ")", model.Description, trkpts))
-                {
-                    statusMessage = "Coś poszło nie tak podczas przetwarzania ustawiania danych trasy";
                     return RedirectToAction("Index", "Home", new { message = statusMessage });
                 }
             }
@@ -212,50 +175,11 @@ namespace Tracker.Controllers
             return RedirectToAction("Index", "Home", new { message = statusMessage });
         }
 
-        public ViewResult Authorization(string code)
+        public ActionResult DuplicateTrack(int trackId, int number)
         {
-            if (code != null)
-            {
-                StravaClient StravaClient = new StravaClient();
-                StravaAuthenticationResponse response = StravaClient.GetAccessToken(code);
+            trackService.DuplicateTrack(trackId, number);
 
-                Session["access_token"] = response.AccessToken;
-
-                var activities = StravaClient.GetAthleteActivities();
-
-                List<DetailedActivity> importedActivities = new List<DetailedActivity>();
-                foreach (var activity in activities)
-                {
-                    if (db.Tracks.SingleOrDefault(t => t.ExternalId == activity.Id) == null)
-                    {
-                        var detailedActivity = StravaClient.GetDetailedActivity(activity.Id, true);
-                        detailedActivity.Import = true;
-                        importedActivities.Add(detailedActivity);
-                    }
-                }
-
-                var viewModel = new ImportConfirmationViewModel()
-                {
-                    DetailedActivities = importedActivities
-                };
-
-                return View("ImportConfirmation", viewModel);
-            }
-
-            return View();
-        }
-
-        public ActionResult Delete(int id)
-        {
-            var trackInDb = db.Tracks.SingleOrDefault(t => t.Id == id);
-
-            if (trackInDb == null)
-                return HttpNotFound();
-
-            db.Tracks.Remove(trackInDb);
-            db.SaveChanges();
-
-            return RedirectToAction("TracksTable");
+            return RedirectToAction("TracksTable", "Admin");
         }
     }
 }

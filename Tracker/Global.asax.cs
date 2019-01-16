@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StackExchange.Profiling;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -16,6 +17,21 @@ namespace Tracker
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+        }
+
+        protected void Application_BeginRequest()
+        {
+            if (Request.IsLocal)
+            {
+                //MiniProfiler will start at the begining of the request. 
+                MiniProfiler.Start();
+            }
+        }
+
+        protected void Application_EndRequest()
+        {
+            //MiniProfiler will stop at the begining of the request. 
+            MiniProfiler.Stop();
         }
     }
 }

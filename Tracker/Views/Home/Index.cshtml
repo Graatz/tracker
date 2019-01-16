@@ -5,6 +5,7 @@
 
 <div class="panel-group">
     <div class="panel">
+        <h2>Statystyki portalu</h2>
         @if (ViewBag.StatusMessage != null)
         {
             <div class="success-message">
@@ -15,25 +16,34 @@
 
         <div class="app-stats">
             <div class="app-stat">
-                <p>@Model.UsersTotal</p>
-                Użytkowników
+                <p>Użytkowników</p>
+                <p class="stat">@Model.UsersTotal</p>
             </div>
             <div class="app-stat">
-                <p>@Model.TracksTotal</p>
-                Tras
+                <p>Tras</p>
+                <p class="stat">@Model.TracksTotal</p>
             </div>
             <div class="app-stat">
-                <p>@Model.TrackPointsTotal</p>
-                Punktów tras
+                <p>Punktów tras</p>
+                <p class="stat">@Model.TrackPointsTotal</p>
             </div>
         </div>
     </div>
 </div> 
 
 <div class="panel-group">
-    <div class="panel">
+    <div class="user-stats">
+        <h2>Twoje statystyki</h2>
+        <img src="~/Content/profile.png" class="profile-picture" />
+        <p>Przesłanych tras:</p>
+        <p class="user-stat">@Model.UserTracksTotal</p>
+        <p>Przebiegnięty dystans:</p>
+        <p class="user-stat">@Math.Round(@Model.UserDistanceTotal) km</p>
+        <input type="button" value="Konfiguracja przeszukiwania" class="set-config button-info" onclick="location.href='@Url.Action("ManageConfig", "Manage")'" />
+    </div>
+    <div class="user-activity">
         <h2>Twoje najnowsze trasy</h2>
-        @if (Model.NumberOfTracks == 0)
+        @if (Model.PaginationViewModel.NumberOfTracks == 0)
         {
             <div class="no-tracks-available-info">
                 <p>Nie przesłano w tym miesiącu żadnej trasy</p>
@@ -60,18 +70,6 @@
             }
         </div>
 
-        <div class="pagination">
-            @for (int i = 0; i < Math.Ceiling((double)((double)Model.NumberOfTracks / (double)Model.NumberOfTracksPerPage)); i++)
-            {
-                if (i == Model.CurrentPage - 1)
-                {
-                    @Html.ActionLink((i + 1).ToString() + " ", "Index", new { startingIndex = i * 10, searchModel = Model }, new { @class = "active-page" })
-                }
-                else
-                {
-                    @Html.ActionLink((i + 1).ToString() + " ", "Index", new { startingIndex = i * 10, searchModel = Model }, null)
-                }
-            }
-        </div>
+        @Html.Partial("_PaginationPartial", Model.PaginationViewModel)
     </div>
 </div> 

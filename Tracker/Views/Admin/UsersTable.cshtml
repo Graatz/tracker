@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Tracker.Models.ApplicationUser>
+@{
+    ViewBag.Title = "Tabela użytkowników";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="panel-group">
+    <div class="panel">
+        <h2>Zarejestrowani użytkownicy</h2>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(m => m.Id)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(m => m.Email)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(m => m.UserName)
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+            </thead>
+
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>
+                        @user.Id
+                    </td>
+
+                    <td>
+                        @user.Email
+                    </td>
+
+                    <td>
+                        @user.UserName
+                    </td>
+
+                    <td>
+                        @Html.ActionLink("Delete", "Delete", "Manage", new { id = user.Id }, null)
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div> 

@@ -15,7 +15,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Tracker</RootNamespace>
     <AssemblyName>Tracker</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
@@ -26,6 +26,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <Use64BitIISExpress />
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -49,6 +50,9 @@
     <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="AutoMapper, Version=8.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.8.0.0\lib\net461\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="BouncyCastle.Crypto, Version=1.8.1.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
       <HintPath>..\packages\Portable.BouncyCastle.1.8.1.2\lib\net4\BouncyCastle.Crypto.dll</HintPath>
     </Reference>
@@ -69,6 +73,9 @@
     </Reference>
     <Reference Include="FubarCoder.RestSharp.Portable.OAuth2, Version=4.0.0.0, Culture=neutral, PublicKeyToken=be81bb0f53eab22f, processorArchitecture=MSIL">
       <HintPath>..\packages\FubarCoder.RestSharp.Portable.OAuth2.4.0.7\lib\net45\FubarCoder.RestSharp.Portable.OAuth2.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.8.11.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.8.11\lib\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.4.0\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
@@ -98,6 +105,9 @@
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.2.0.0\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Owin, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.3.1.0\lib\net45\Microsoft.Owin.dll</HintPath>
     </Reference>
@@ -125,29 +135,49 @@
     <Reference Include="Microsoft.Owin.Security.Twitter, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.Security.Twitter.3.1.0\lib\net45\Microsoft.Owin.Security.Twitter.dll</HintPath>
     </Reference>
+    <Reference Include="MiniProfiler, Version=3.0.10.0, Culture=neutral, PublicKeyToken=b44f9351044011a3, processorArchitecture=MSIL">
+      <HintPath>..\packages\MiniProfiler.3.0.10\lib\net40\MiniProfiler.dll</HintPath>
+    </Reference>
+    <Reference Include="MiniProfiler.Mvc, Version=3.0.11.0, Culture=neutral, PublicKeyToken=b44f9351044011a3, processorArchitecture=MSIL">
+      <HintPath>..\packages\MiniProfiler.MVC4.3.0.11\lib\net40\MiniProfiler.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="RestSharp, Version=106.3.1.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
-      <HintPath>..\packages\RestSharp.106.3.1\lib\net452\RestSharp.dll</HintPath>
+    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.3.2.0.0\lib\net45-full\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Web.Common, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.Web.Common.3.2.0.0\lib\net45-full\Ninject.Web.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Web.Mvc, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.MVC5.3.2.1.0\lib\net45-full\Ninject.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp, Version=106.6.5.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.106.6.5\lib\net452\RestSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.4.0\lib\net45\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.2.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.4.1\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.ValueTuple">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Routing" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
@@ -188,6 +218,10 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebActivatorEx.2.0\lib\net40\WebActivatorEx.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
     </Reference>
@@ -210,20 +244,34 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
+    <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\StravaTrackController.cs" />
     <Compile Include="Controllers\TrackController.cs" />
+    <Compile Include="Controllers\WebCrawlerController.cs" />
+    <Compile Include="DAL\GenericRepository.cs" />
+    <Compile Include="DAL\IRepository.cs" />
+    <Compile Include="DAL\IUnitOfWork.cs" />
+    <Compile Include="DAL\UnitOfWork.cs" />
+    <Compile Include="DTO\TrackDTO.cs" />
+    <Compile Include="DTO\TrackPointDTO.cs" />
+    <Compile Include="DTO\UserDTO.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\DefaultTrackHandler.cs" />
     <Compile Include="Helpers\GeoMath.cs" />
     <Compile Include="Helpers\GpxParser.cs" />
-    <Compile Include="Helpers\StravaTrackHandler.cs" />
+    <Compile Include="Helpers\IParser.cs" />
+    <Compile Include="Services\IStravaTrackService.cs" />
+    <Compile Include="Services\OpenStreetMapCrawlerService.cs" />
     <Compile Include="Helpers\TrackHandler.cs" />
+    <Compile Include="Helpers\WebCrawler.cs" />
     <Compile Include="Migrations\201712281749282_InitialCreate.cs" />
     <Compile Include="Migrations\201712281749282_InitialCreate.Designer.cs">
       <DependentUpon>201712281749282_InitialCreate.cs</DependentUpon>
@@ -276,25 +324,45 @@
     <Compile Include="Migrations\201811012335076_UserConfig.Designer.cs">
       <DependentUpon>201811012335076_UserConfig.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201812060353116_TrackPointsIndexes.cs" />
+    <Compile Include="Migrations\201812060353116_TrackPointsIndexes.Designer.cs">
+      <DependentUpon>201812060353116_TrackPointsIndexes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201812061919589_OpenStreetMap support.cs" />
+    <Compile Include="Migrations\201812061919589_OpenStreetMap support.Designer.cs">
+      <DependentUpon>201812061919589_OpenStreetMap support.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201812070300332_NullableDateTime.cs" />
+    <Compile Include="Migrations\201812070300332_NullableDateTime.Designer.cs">
+      <DependentUpon>201812070300332_NullableDateTime.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201812111722405_UpdateTrackPointElevation.cs" />
+    <Compile Include="Migrations\201812111722405_UpdateTrackPointElevation.Designer.cs">
+      <DependentUpon>201812111722405_UpdateTrackPointElevation.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
     <Compile Include="Models\HomeViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\Track.cs" />
+    <Compile Include="Models\TrackModels.cs" />
     <Compile Include="Models\TrackPoint.cs" />
     <Compile Include="Models\UserConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ICrawlerService.cs" />
+    <Compile Include="Services\ITrackService.cs" />
+    <Compile Include="Services\StravaTrackService.cs" />
+    <Compile Include="Services\TrackService.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="Strava\DetailedActivity.cs" />
-    <Compile Include="Strava\DetailedSegmentEffort.cs" />
-    <Compile Include="Strava\PolylineMap.cs" />
-    <Compile Include="Strava\StravaAuthenticationResponse.cs" />
-    <Compile Include="Strava\Athlete.cs" />
-    <Compile Include="Strava\StravaClient.cs" />
-    <Compile Include="Strava\SummaryActivity.cs" />
-    <Compile Include="Strava\SummarySegment.cs" />
+    <Compile Include="Helpers\Strava\DetailedActivity.cs" />
+    <Compile Include="Helpers\Strava\DetailedSegmentEffort.cs" />
+    <Compile Include="Helpers\Strava\PolylineMap.cs" />
+    <Compile Include="Helpers\Strava\StravaAuthenticationResponse.cs" />
+    <Compile Include="Helpers\Strava\Athlete.cs" />
+    <Compile Include="Helpers\Strava\StravaClient.cs" />
+    <Compile Include="Helpers\Strava\SummaryActivity.cs" />
+    <Compile Include="Helpers\Strava\SummarySegment.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\animation.css" />
@@ -311,6 +379,7 @@
     </Content>
     <Content Include="Content\style.css.map" />
     <Content Include="Content\style.scss" />
+    <Content Include="ClassDiagram1.cd" />
     <None Include="Scripts\jquery-3.2.1.intellisense.js" />
     <Content Include="Scripts\chart.bundle.js" />
     <Content Include="Scripts\jquery-3.2.1.js" />
@@ -361,19 +430,26 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Track\TracksTable.cshtml" />
+    <Content Include="Views\Admin\TracksTable.cshtml" />
     <Content Include="Views\Track\Details.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Manage\UsersTable.cshtml" />
+    <Content Include="Views\Admin\UsersTable.cshtml" />
     <Content Include="Views\Account\Test.cshtml" />
     <Content Include="Views\Track\UploadForm.cshtml" />
     <Content Include="Views\Track\Search.cshtml" />
-    <Content Include="Views\Track\Tracks.cshtml" />
+    <Content Include="Views\Track\ListTracks.cshtml" />
     <Content Include="Views\Track\Compare.cshtml" />
-    <Content Include="Views\Track\Authorization.cshtml" />
-    <Content Include="Views\Track\ImportConfirmation.cshtml" />
+    <Content Include="Views\StravaTrack\ImportConfirmation.cshtml" />
     <Content Include="Views\Manage\ManageConfig.cshtml" />
+    <Content Include="Views\Shared\_LayoutWide.cshtml" />
+    <Content Include="Views\Shared\_PaginationPartial.cshtml" />
+    <Content Include="Views\Shared\_SearchModelPaginationPartial.cshtml" />
+    <Content Include="Views\WebCrawler\OsmWebCrawler.cshtml" />
+    <Content Include="Views\Track\SimilarTracks.cshtml" />
+    <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Shared\_NavbarPartial.cshtml" />
+    <Content Include="Views\Shared\_AdminLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -426,6 +502,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201811012335076_UserConfig.resx">
       <DependentUpon>201811012335076_UserConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812060353116_TrackPointsIndexes.resx">
+      <DependentUpon>201812060353116_TrackPointsIndexes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812061919589_OpenStreetMap support.resx">
+      <DependentUpon>201812061919589_OpenStreetMap support.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812070300332_NullableDateTime.resx">
+      <DependentUpon>201812070300332_NullableDateTime.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812111722405_UpdateTrackPointElevation.resx">
+      <DependentUpon>201812111722405_UpdateTrackPointElevation.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

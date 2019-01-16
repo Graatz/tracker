@@ -1,0 +1,43 @@
+﻿@using StackExchange.Profiling
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title — Tracker</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Poppins:300,400,700,900" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css"
+          integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
+          crossorigin="" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+
+<body>
+    <div class="wrapper">
+        @Html.Partial("_NavbarPartial")
+
+        <div class="admin-panel">
+            <div class="admin-panel-menu">
+                <p class="title">Menu</p>
+                @Html.ActionLink("Tabela użytkowników", "UsersTable", "Admin")
+                @Html.ActionLink("Tabela tras", "TracksTable", "Admin")
+                @Html.ActionLink("Crawler", "OsmWebCrawler", "WebCrawler")
+            </div>
+            <div class="admin-panel-content">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/chartjs")
+    @RenderSection("scripts", required: false)
+    @MiniProfiler.RenderIncludes()
+</body>
+
+</html>
+

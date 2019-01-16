@@ -1,22 +1,49 @@
 ﻿@model Tracker.Models.DetailsViewModel
 @{
     ViewBag.Title = "Szczegóły";
+    var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+    serializer.MaxJsonLength = Int32.MaxValue;
+    var trackPoints = serializer.Serialize(Model.TrackPoints);
+    var track = serializer.Serialize(Model.Track);
 }
-
 <div class="panel-group">
     <div class="panel">
-        <h2>@Model.Track.Name</h2>
+        <h2>@Model.Track.Name (@Model.TrackPoints.Count punktów)</h2>
         <div class="track-info">
             <div class="track-info-row">
                 <p><span>Data dodania:</span> @Model.Track.UploadDate</p>
+            </div>
+            <div class="track-info-row">
+                @if (Model.Track.TrackDate == null) {
+                    <p><span>Data trasy:</span> Brak danych</p>
+                }
+                else
+                {
+                    <p><span>Data trasy:</span> @Model.Track.TrackDate</p>
+                }
             </div>
             <div class="track-info-row">
                 <p><span>Start:</span> @Model.Track.StartLocation</p>
                 <p><span>Koniec:</span> @Model.Track.EndLocation</p>
             </div>
             <div class="track-info-row">
-                <p><span>Dystans:</span> @Math.Round(@Model.Track.Distance, 2) km</p>
-                <p><span>Średnia prędkość:</span> @Math.Round(@Model.Track.AvarageSpeed, 2) km/h</p>
+                @if (@Model.Track.Distance == 0)
+                {
+                    <p><span>Dystans:</span> Brak danych</p>
+                }
+                else
+                {
+                    <p><span>Dystans:</span> @Math.Round(@Model.Track.Distance, 2) km</p>
+                }
+
+                @if (@Model.Track.AvarageSpeed == 0)
+                {
+                    <p><span>Średnia prędkość:</span> Brak danych</p>
+                }
+                else
+                {
+                    <p><span>Średnia prędkość:</span> @Math.Round(@Model.Track.AvarageSpeed, 2) km/h</p>
+                }
             </div>
         </div>
         <div id="map"></div>
@@ -25,37 +52,13 @@
 
 <div class="panel-group">
     <div class="panel">
-        <h2>Podobne trasy:</h2>
-        @if (Model.SimilarTracks.Count > 0)
-        {
-            <div class="track-cards">
-                @foreach (var similarTrack in Model.SimilarTracks)
-                {
-                    <div class="track-card">
-                        @Html.ActionLink(@similarTrack.Name, "Compare",
-                                new
-                                {
-                                    trackId1 = Model.Track.Id,
-                                    trackId2 = similarTrack.Id,
-                                }, null)
-                        <div class="track-card-row">
-                            <p><span>Data dodania:</span> @similarTrack.UploadDate</p>
-                        </div>
-                        <div class="track-card-row">
-                            <p><span>Start:</span> @similarTrack.StartLocation</p>
-                            <p><span>Koniec:</span> @similarTrack.EndLocation</p>
-                        </div>
-                        <div class="track-card-row">
-                            <p><span>Dystans:</span> @Math.Round(similarTrack.Distance, 2) km</p>
-                        </div>
-                    </div>
-                }
-            </div>
-        }
-        else
-        {
-            <p>Nie znaleziono podobnych tras</p>
-        }
+        <canvas id="myChart"></canvas>
+    </div>
+</div>
+
+<div class="panel-group">
+    <div class="panel search-similar">
+        <input type="button" value="Wyszukaj podobne trasy" class="button-default" onclick="location.href='@Url.Action("SimilarTracks", "Track", new { id = Model.Track.Id })'" />     
     </div>
 </div>
 
@@ -65,8 +68,83 @@
             integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
             crossorigin="">
     </script>
+
     <script>
-        let data = @Html.Raw(Json.Encode(Model.TrackPoints));
+        let ctx = document.getElementById("myChart").getContext('2d');
+        let chartData = @Html.Raw(trackPoints);
+        let trackData = @Html.Raw(track);
+
+        let xData = new Array();
+        let yData = new Array();
+        let currentDist = 0;
+        console.log(trackData.Distance);
+
+        for (let i = 0; i < chartData.length; i++) {
+            let obj = chartData[i];
+            currentDist += trackData.Distance / chartData.length;
+            xData.push(Math.round(currentDist * 100) / 100);
+            yData.push(obj.Elevation);
+        }
+
+        let myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                datasets: [{
+                    data: yData,
+                    borderColor: '#ccc',
+                    fill: true,
+                    pointRadius: 0,
+                    lineWidth: 0
+                    
+                }],
+                labels: xData,
+            },
+            options: {
+                scaleShowValues: true,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            maxTicksLimit: 4,
+                            beginAtZero: false
+                        }
+                    }],
+                    xAxes: [{
+                        ticks: {
+                            callback: function (value, index, values) {
+                                return value + " km";
+                            },
+                            maxTicksLimit: 10,
+                            lineHeight: 0.3,
+                            maxRotation: 0,
+                        }
+                    }]
+                },
+                responsive: true,
+                maintainAspectRatio: false,
+                legend: {
+                    display: false
+                },
+                tooltips: {
+                    intersect: false
+                }
+            }
+        });
+    </script>
+
+    <script>
+        let start = L.icon({
+            iconUrl: '/Content/start.png',
+            iconSize: [21, 21],
+            iconAnchor: [11, 11],
+        });
+
+        let stop = L.icon({
+            iconUrl: '/Content/stop.png',
+            iconSize: [21, 21],
+            iconAnchor: [11, 11],
+        });
+
+        let data = @Html.Raw(trackPoints);
 
         let trackCoordinates = new Array();
 
@@ -76,15 +154,22 @@
         }
         let map = L.map('map');
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        /*L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
             maxZoom: 18,
+        }).addTo(map);*/
+
+        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            maxZoom: 18,
+            id: 'mapbox.streets',
+            accessToken: 'pk.eyJ1IjoiZ3JhYXR6IiwiYSI6ImNqajV6ZzJlMjBnczIzcG8zNWxrNWs3MTMifQ.BJ-5hUitaJan8HS_tub4rw'
         }).addTo(map);
 
-        let polyline = L.polyline(trackCoordinates, { color: 'red' }).addTo(map);
+        let polyline = L.polyline(trackCoordinates, { color: '#0066ff' }).addTo(map);
         map.fitBounds(polyline.getBounds());
 
-        let startMarker = L.marker(trackCoordinates[0]).addTo(map);
-        let endMarker = L.marker(trackCoordinates[trackCoordinates.length - 1]).addTo(map);
+        let startMarker = L.marker(trackCoordinates[0], { icon: start }).addTo(map);
+        let endMarker = L.marker(trackCoordinates[trackCoordinates.length - 1], { icon: stop }).addTo(map);
     </script>
 }

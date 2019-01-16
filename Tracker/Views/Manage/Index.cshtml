@@ -17,7 +17,7 @@
         <div class="manage-tiles">
                 @if (Model.HasPassword)
                 {
-                    @Html.ActionLink("Moje trasy", "Tracks", "Track", new { User = Model.User }, new { @class = "manage-tile" })
+                    @Html.ActionLink("Moje trasy", "ListTracks", "Track", new { User = Model.User }, new { @class = "manage-tile" })
                 }
 
                 @if (Model.HasPassword)

@@ -1,0 +1,447 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="GPS Track Editor" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gte="http://www.gpstrackeditor.com/xmlschemas/General/1" xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v1" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" targetNamespace="http://www.topografix.com/GPX/1/1" elementFormDefault="qualified" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+<metadata>
+	<name>solution_201812151319.gpx</name>
+</metadata>
+<trk>
+	<name>15 December 2018</name>
+	<trkseg>
+		<trkpt lat="-8.820428" lon="13.250642">
+			<ele>72.50</ele>
+			<time>2018-12-15T13:21:02Z</time>
+			<fix>3d</fix>
+			<sat>10</sat>
+			<extensions>
+				<gte:gps speed="8.9" azimuth="113.8"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.820431" lon="13.250665">
+			<ele>70.71</ele>
+			<time>2018-12-15T13:21:03Z</time>
+			<fix>3d</fix>
+			<sat>10</sat>
+			<extensions>
+				<gte:gps speed="9.8" azimuth="119.6"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.820447" lon="13.250682">
+			<ele>71.60</ele>
+			<time>2018-12-15T13:21:04Z</time>
+			<fix>3d</fix>
+			<sat>9</sat>
+			<extensions>
+				<gte:gps speed="9.4" azimuth="121.8"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.820459" lon="13.250708">
+			<ele>73.10</ele>
+			<time>2018-12-15T13:21:05Z</time>
+			<fix>3d</fix>
+			<sat>9</sat>
+			<extensions>
+				<gte:gps speed="9.2" azimuth="122.4"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.820470" lon="13.250729">
+			<ele>72.56</ele>
+			<time>2018-12-15T13:21:06Z</time>
+			<fix>3d</fix>
+			<sat>9</sat>
+			<extensions>
+				<gte:gps speed="9.4" azimuth="119.2"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.820484" lon="13.250746">
+			<ele>72.52</ele>
+			<time>2018-12-15T13:21:07Z</time>
+			<fix>3d</fix>
+			<sat>9</sat>
+			<extensions>
+				<gte:gps speed="9.8" azimuth="117.9"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.820496" lon="13.250767">
+			<ele>71.98</ele>
+			<time>2018-12-15T13:21:08Z</time>
+			<fix>3d</fix>
+			<sat>9</sat>
+			<extensions>
+				<gte:gps speed="9.8" azimuth="118.6"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.820507" lon="13.250788">
+			<ele>71.56</ele>
+			<time>2018-12-15T13:21:09Z</time>
+			<fix>3d</fix>
+			<sat>9</sat>
+			<extensions>
+				<gte:gps speed="9.2" azimuth="115.7"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.820517" lon="13.250809">
+			<ele>72.05</ele>
+			<time>2018-12-15T13:21:10Z</time>
+			<fix>3d</fix>
+			<sat>9</sat>
+			<extensions>
+				<gte:gps speed="8.1" azimuth="116.2"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.820556" lon="13.250869">
+			<ele>76.31</ele>
+			<time>2018-12-15T13:21:13Z</time>
+			<fix>3d</fix>
+			<sat>8</sat>
+			<extensions>
+				<gte:gps speed="9.4" azimuth="119.9"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.820558" lon="13.250881">
+			<ele>72.00</ele>
+			<time>2018-12-15T13:21:14Z</time>
+			<fix>3d</fix>
+			<sat>9</sat>
+			<extensions>
+				<gte:gps speed="8.2" azimuth="119.8"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.820566" lon="13.250895">
+			<ele>67.74</ele>
+			<time>2018-12-15T13:21:15Z</time>
+			<fix>3d</fix>
+			<sat>9</sat>
+			<extensions>
+				<gte:gps speed="10.5" azimuth="126.9"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.820570" lon="13.250924">
+			<ele>74.49</ele>
+			<time>2018-12-15T13:21:16Z</time>
+			<fix>3d</fix>
+			<sat>10</sat>
+			<extensions>
+				<gte:gps speed="8.2" azimuth="120.7"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.820586" lon="13.250935">
+			<ele>71.61</ele>
+			<time>2018-12-15T13:21:17Z</time>
+			<fix>3d</fix>
+			<sat>9</sat>
+			<extensions>
+				<gte:gps speed="9.0" azimuth="115.9"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.820590" lon="13.250955">
+			<ele>72.40</ele>
+			<time>2018-12-15T13:21:18Z</time>
+			<fix>3d</fix>
+			<sat>10</sat>
+			<extensions>
+				<gte:gps speed="8.4" azimuth="113.6"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.820593" lon="13.250978">
+			<ele>72.32</ele>
+			<time>2018-12-15T13:21:19Z</time>
+			<fix>3d</fix>
+			<sat>10</sat>
+			<extensions>
+				<gte:gps speed="8.6" azimuth="119.9"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.820624" lon="13.251012">
+			<ele>68.59</ele>
+			<time>2018-12-15T13:21:21Z</time>
+			<fix>3d</fix>
+			<sat>9</sat>
+			<extensions>
+				<gte:gps speed="8.5" azimuth="117.5"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.820639" lon="13.251036">
+			<ele>70.29</ele>
+			<time>2018-12-15T13:21:22Z</time>
+			<fix>3d</fix>
+			<sat>9</sat>
+			<extensions>
+				<gte:gps speed="8.5" azimuth="119.1"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.820646" lon="13.251053">
+			<ele>70.27</ele>
+			<time>2018-12-15T13:21:23Z</time>
+			<fix>3d</fix>
+			<sat>9</sat>
+			<extensions>
+				<gte:gps speed="9.1" azimuth="111.3"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.820657" lon="13.251075">
+			<ele>70.72</ele>
+			<time>2018-12-15T13:21:24Z</time>
+			<fix>3d</fix>
+			<sat>9</sat>
+			<extensions>
+				<gte:gps speed="8.7" azimuth="114.5"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.820666" lon="13.251093">
+			<ele>71.25</ele>
+			<time>2018-12-15T13:21:25Z</time>
+			<fix>3d</fix>
+			<sat>9</sat>
+			<extensions>
+				<gte:gps speed="8.2" azimuth="108.7"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.820667" lon="13.251120">
+			<ele>74.33</ele>
+			<time>2018-12-15T13:21:26Z</time>
+			<fix>3d</fix>
+			<sat>10</sat>
+			<extensions>
+				<gte:gps speed="8.6" azimuth="119.3"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.820684" lon="13.251132">
+			<ele>70.62</ele>
+			<time>2018-12-15T13:21:27Z</time>
+			<fix>3d</fix>
+			<sat>10</sat>
+			<extensions>
+				<gte:gps speed="9.6" azimuth="116.4"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.820696" lon="13.251157">
+			<ele>71.11</ele>
+			<time>2018-12-15T13:21:28Z</time>
+			<fix>3d</fix>
+			<sat>9</sat>
+			<extensions>
+				<gte:gps speed="11.2" azimuth="122.9"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.820710" lon="13.251180">
+			<ele>71.76</ele>
+			<time>2018-12-15T13:21:29Z</time>
+			<fix>3d</fix>
+			<sat>9</sat>
+			<extensions>
+				<gte:gps speed="10.5" azimuth="120.7"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.820723" lon="13.251207">
+			<ele>72.37</ele>
+			<time>2018-12-15T13:21:30Z</time>
+			<fix>3d</fix>
+			<sat>9</sat>
+			<extensions>
+				<gte:gps speed="10.7" azimuth="120.3"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.820763" lon="13.251232">
+			<ele>70.95</ele>
+			<time>2018-12-15T13:21:31Z</time>
+			<fix>3d</fix>
+			<sat>12</sat>
+			<extensions>
+				<gte:gps speed="12.6" azimuth="119.3"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.820771" lon="13.251271">
+			<ele>74.80</ele>
+			<time>2018-12-15T13:21:32Z</time>
+			<fix>3d</fix>
+			<sat>12</sat>
+			<extensions>
+				<gte:gps speed="14.6" azimuth="121.9"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.820789" lon="13.251304">
+			<ele>74.80</ele>
+			<time>2018-12-15T13:21:33Z</time>
+			<fix>3d</fix>
+			<sat>12</sat>
+			<extensions>
+				<gte:gps speed="16.1" azimuth="116.7"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.820820" lon="13.251365">
+			<ele>72.31</ele>
+			<time>2018-12-15T13:21:34Z</time>
+			<fix>3d</fix>
+			<sat>10</sat>
+			<extensions>
+				<gte:gps speed="15.8" azimuth="117.2"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.820840" lon="13.251399">
+			<ele>71.47</ele>
+			<time>2018-12-15T13:21:35Z</time>
+			<fix>3d</fix>
+			<sat>10</sat>
+			<extensions>
+				<gte:gps speed="16.0" azimuth="119.7"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.820867" lon="13.251405">
+			<ele>73.84</ele>
+			<time>2018-12-15T13:21:36Z</time>
+			<fix>3d</fix>
+			<sat>8</sat>
+			<extensions>
+				<gte:gps speed="15.0" azimuth="114.1"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.820885" lon="13.251442">
+			<ele>78.62</ele>
+			<time>2018-12-15T13:21:37Z</time>
+			<fix>3d</fix>
+			<sat>8</sat>
+			<extensions>
+				<gte:gps speed="14.9" azimuth="123.1"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.820888" lon="13.251470">
+			<ele>74.11</ele>
+			<time>2018-12-15T13:21:38Z</time>
+			<fix>3d</fix>
+			<sat>9</sat>
+			<extensions>
+				<gte:gps speed="13.1" azimuth="115.8"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.820909" lon="13.251511">
+			<ele>71.10</ele>
+			<time>2018-12-15T13:21:39Z</time>
+			<fix>3d</fix>
+			<sat>12</sat>
+			<extensions>
+				<gte:gps speed="11.6" azimuth="116.0"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.820920" lon="13.251556">
+			<ele>69.11</ele>
+			<time>2018-12-15T13:21:40Z</time>
+			<fix>3d</fix>
+			<sat>12</sat>
+			<extensions>
+				<gte:gps speed="10.9" azimuth="117.2"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.820935" lon="13.251579">
+			<ele>68.20</ele>
+			<time>2018-12-15T13:21:41Z</time>
+			<fix>3d</fix>
+			<sat>12</sat>
+			<extensions>
+				<gte:gps speed="10.6" azimuth="118.1"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.820944" lon="13.251590">
+			<ele>70.33</ele>
+			<time>2018-12-15T13:21:42Z</time>
+			<fix>3d</fix>
+			<sat>11</sat>
+			<extensions>
+				<gte:gps speed="9.5" azimuth="118.6"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.820983" lon="13.251616">
+			<ele>73.76</ele>
+			<time>2018-12-15T13:21:44Z</time>
+			<fix>3d</fix>
+			<sat>11</sat>
+			<extensions>
+				<gte:gps speed="9.6" azimuth="115.9"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.821006" lon="13.251636">
+			<ele>72.75</ele>
+			<time>2018-12-15T13:21:45Z</time>
+			<fix>3d</fix>
+			<sat>9</sat>
+			<extensions>
+				<gte:gps speed="9.3" azimuth="114.2"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.821009" lon="13.251662">
+			<ele>72.07</ele>
+			<time>2018-12-15T13:21:46Z</time>
+			<fix>3d</fix>
+			<sat>9</sat>
+			<extensions>
+				<gte:gps speed="8.1" azimuth="115.6"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.821002" lon="13.251687">
+			<ele>67.75</ele>
+			<time>2018-12-15T13:21:48Z</time>
+			<fix>3d</fix>
+			<sat>11</sat>
+			<extensions>
+				<gte:gps speed="8.5" azimuth="119.5"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.821023" lon="13.251727">
+			<ele>72.38</ele>
+			<time>2018-12-15T13:21:50Z</time>
+			<fix>3d</fix>
+			<sat>11</sat>
+			<extensions>
+				<gte:gps speed="8.2" azimuth="111.0"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.821026" lon="13.251747">
+			<ele>75.21</ele>
+			<time>2018-12-15T13:21:51Z</time>
+			<fix>3d</fix>
+			<sat>12</sat>
+			<extensions>
+				<gte:gps speed="8.6" azimuth="122.4"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.821061" lon="13.251764">
+			<ele>70.23</ele>
+			<time>2018-12-15T13:21:52Z</time>
+			<fix>3d</fix>
+			<sat>12</sat>
+			<extensions>
+				<gte:gps speed="7.9" azimuth="112.2"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.821067" lon="13.251784">
+			<ele>70.39</ele>
+			<time>2018-12-15T13:21:53Z</time>
+			<fix>3d</fix>
+			<sat>11</sat>
+			<extensions>
+				<gte:gps speed="7.7" azimuth="124.6"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.821083" lon="13.251831">
+			<ele>71.46</ele>
+			<time>2018-12-15T13:21:54Z</time>
+			<fix>3d</fix>
+			<sat>11</sat>
+			<extensions>
+				<gte:gps speed="7.4" azimuth="110.8"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.821108" lon="13.251844">
+			<ele>68.56</ele>
+			<time>2018-12-15T13:21:57Z</time>
+			<fix>3d</fix>
+			<sat>13</sat>
+			<extensions>
+				<gte:gps speed="7.1" azimuth="127.2"/>
+			</extensions>
+		</trkpt>
+		<extensions>
+			<gte:name>#1</gte:name>
+			<gte:color>#efd973</gte:color>
+		</extensions>
+	</trkseg>
+</trk>
+</gpx>

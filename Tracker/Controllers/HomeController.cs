@@ -36,22 +36,20 @@ namespace Tracker.Controllers
             var result = db.Tracks.Where(t => t.UserId.ToString() == userId)
                 .Where(t => t.UploadDate >= monthSpan)
                 .Include(t => t.User)
-                .OrderByDescending(t => t.UploadDate)
-                .Skip(startingIndex)
-                .Take(10)
-                .ToList();
+                .OrderByDescending(t => t.UploadDate);
+
+            var userTracksTotal = result.Count();
+            var userDistanceTotal = result.Sum(t => t.Distance);
 
             var viewModel = new IndexViewModel()
             {
+                UserTracksTotal = userTracksTotal,
+                UserDistanceTotal = userDistanceTotal,
+                Tracks = result.Skip(startingIndex).Take(10).ToList(),
                 TracksTotal = db.Tracks.Count(),
                 UsersTotal = db.Users.Count(),
                 TrackPointsTotal = db.TrackPoints.Count(),
-
-                NumberOfTracks = db.Tracks.Where(t => t.UserId.ToString() == userId).Where(t => t.UploadDate >= monthSpan).Count(),
-                Tracks = result,
-                CurrentPage = (startingIndex / 10) + 1,
-                StartingIndex = 0,
-                NumberOfTracksPerPage = 10
+                PaginationViewModel = new PaginationViewModel("Index", new TrackSearchModel(), result.Count(), 0, 10, startingIndex / 10)
             };
 
             if (!string.IsNullOrEmpty(message))

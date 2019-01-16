@@ -8,43 +8,43 @@ using Tracker.Models;
 
 namespace Tracker.Helpers
 {
-    public class GpxParser
+    public class GpxParser : IParser
     {
+        protected XNamespace Namespace { get; set; }
+
         public GpxParser()
         {
-
+            Namespace = XNamespace.Get("http://www.topografix.com/GPX/1/1");
         }
 
-        public List<TrackPoint> StreamToTrackPoints(Stream fileStream)
+        public List<TrackPoint> Parse(Stream fileStream)
         {
-            XDocument gpxDoc = XDocument.Load(fileStream);
-            XNamespace gpx = XNamespace.Get("http://www.topografix.com/GPX/1/1");
+            XDocument content = XDocument.Load(fileStream);
 
-            List<TrackPoint> points = new List<TrackPoint>();
+            HashSet<TrackPoint> points = new HashSet<TrackPoint>(new TrackPointComparer());
 
-            IEnumerable<XElement> collection = gpxDoc.Descendants(gpx + "trkpt") != null ?
-                                               gpxDoc.Descendants(gpx + "trkpt") : 
-                                               gpxDoc.Descendants(gpx + "wpt");
+            IEnumerable<XElement> collection = content.Descendants(Namespace + "trkpt") ?? content.Descendants(Namespace + "wpt");
 
             foreach (var item in collection)
             {
                 float lat = float.Parse(item.Attribute("lat").Value, CultureInfo.InvariantCulture);
                 float lon = float.Parse(item.Attribute("lon").Value, CultureInfo.InvariantCulture);
                 DateTime date = DateTime.Now;
-                try
+                float elevation = 0;
+
+                if (item.Element(Namespace + "time") != null)
+                    date = DateTime.Parse(item.Element(Namespace + "time").Value);
+
+                if (item.Element(Namespace + "ele") != null)
                 {
-                    date = DateTime.Parse(item.Element(gpx + "time").Value);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
-                    date = DateTime.Now;
+                    string el = item.Element(Namespace + "ele").Value.Replace('.', ',');
+                    elevation = float.Parse(el);
                 }
 
-                points.Add(new TrackPoint(lat, lon, date));
+                points.Add(new TrackPoint(lat, lon, elevation, date));
             }
 
-            return points;
+            return new List<TrackPoint>(points);
         }
     }
 }

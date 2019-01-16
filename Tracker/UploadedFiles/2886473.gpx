@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<gpx version="1.1" creator="Locus Map, Android"
+ xmlns="http://www.topografix.com/GPX/1/1"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd"
+ xmlns:gpx_style="http://www.topografix.com/GPX/gpx_style/0/2"
+ xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3"
+ xmlns:gpxtrkx="http://www.garmin.com/xmlschemas/TrackStatsExtension/v1"
+ xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v2"
+ xmlns:locus="http://www.locusmap.eu">
+	<metadata>
+		<desc>File with points/tracks from Locus Map/3.35.2</desc>
+	</metadata>
+<trk>
+<name>2019-01-06 19:57:16</name>
+<desc><![CDATA[Lutvann]]></desc>
+	<extensions>
+		<gpx_style:line>
+			<gpx_style:color>0000FF</gpx_style:color>
+			<gpx_style:opacity>0.59</gpx_style:opacity>
+			<gpx_style:width>6.0</gpx_style:width>
+		</gpx_style:line>
+		<locus:activity>walking</locus:activity>
+	</extensions>
+<trkseg>
+<trkpt lat="59.906293" lon="10.875803">
+	<ele>201.02</ele>
+	<time>2019-01-06T19:01:11.999Z</time>
+	<pdop>6.00</pdop>
+	<extensions>
+		<gpxtpx:TrackPointExtension>
+			<gpxtpx:course>186.65395</gpxtpx:course>
+		</gpxtpx:TrackPointExtension>
+	</extensions>
+</trkpt>
+<trkpt lat="59.906314" lon="10.875757">
+	<ele>200.30</ele>
+	<time>2019-01-06T19:01:21.999Z</time>
+	<pdop>12.00</pdop>
+	<extensions>
+		<gpxtpx:TrackPointExtension>
+			<gpxtpx:course>55.27778</gpxtpx:course>
+		</gpxtpx:TrackPointExtension>
+	</extensions>
+</trkpt>
+<trkpt lat="59.906351" lon="10.875786">
+	<ele>201.48</ele>
+	<time>2019-01-06T19:01:31.999Z</time>
+	<pdop>6.00</pdop>
+	<extensions>
+		<gpxtpx:TrackPointExtension>
+			<gpxtpx:course>31.661089</gpxtpx:course>
+		</gpxtpx:TrackPointExtension>
+	</extensions>
+</trkpt>
+<trkpt lat="59.906393" lon="10.875990">
+	<ele>201.75</ele>
+	<time>2019-01-06T19:01:41.999Z</time>
+	<pdop>4.00</pdop>
+	<extensions>
+		<gpxtpx:TrackPointExtension>
+			<gpxtpx:course>100.759735</gpxtpx:course>
+		</gpxtpx:TrackPointExtension>
+	</extensions>
+</trkpt>
+<trkpt lat="59.906394" lon="10.876153">
+	<ele>202.78</ele>
+	<time>2019-01-06T19:01:51.999Z</time>
+	<pdop>4.00</pdop>
+	<extensions>
+		<gpxtpx:TrackPointExtension>
+			<gpxtpx:course>117.57194</gpxtpx:course>
+		</gpxtpx:TrackPointExtension>
+	</extensions>
+</trkpt>
+<trkpt lat="59.906312" lon="10.876244">
+	<ele>203.48</ele>
+	<time>2019-01-06T19:02:01.999Z</time>
+	<pdop>6.00</pdop>
+	<extensions>
+		<gpxtpx:TrackPointExtension>
+			<gpxtpx:course>197.59824</gpxtpx:course>
+		</gpxtpx:TrackPointExtension>
+	</extensions>
+</trkpt>
+<trkpt lat="59.906250" lon="10.876165">
+	<ele>203.73</ele>
+	<time>2019-01-06T19:02:11.999Z</time>
+	<pdop>4.00</pdop>
+	<extensions>
+		<gpxtpx:TrackPointExtension>
+			<gpxtpx:course>217.08646</gpxtpx:course>
+		</gpxtpx:TrackPointExtension>
+	</extensions>
+</trkpt>
+<trkpt lat="59.906145" lon="10.875996">
+	<ele>204.29</ele>
+	<time>2019-01-06T19:02:21.999Z</time>
+	<pdop>4.00</pdop>
+	<extensions>
+		<gpxtpx:TrackPointExtension>
+			<gpxtpx:course>222.40155</gpxtpx:course>
+		</gpxtpx:TrackPointExtension>
+	</extensions>
+</trkpt>
+<trkpt lat="59.906077" lon="10.875911">
+	<ele>204.75</ele>
+	<time>2019-01-06T19:02:31.999Z</time>
+	<pdop>6.00</pdop>
+	<extensions>
+		<gpxtpx:TrackPointExtension>
+			<gpxtpx:course>216.69087</gpxtpx:course>
+		</gpxtpx:TrackPointExtension>
+	</extensions>
+</trkpt>
+<trkpt lat="59.906023" lon="10.875824">
+	<ele>205.24</ele>
+	<time>2019-01-06T19:02:41.999Z</time>
+	<pdop>4.00</pdop>
+	<extensions>
+		<gpxtpx:TrackPointExtension>
+			<gpxtpx:course>75.71311</gpxtpx:course>
+		</gpxtpx:TrackPointExtension>
+	</extensions>
+</trkpt>
+<trkpt lat="59.906065" lon="10.876062">
+	<ele>205.79</ele>
+	<time>2019-01-06T19:02:51.999Z</time>
+	<pdop>4.00</pdop>
+	<extensions>
+		<gpxtpx:TrackPointExtension>
+			<gpxtpx:course>114.28866</gpxtpx:course>
+		</gpxtpx:TrackPointExtension>
+	</extensions>
+</trkpt>
+<trkpt lat="59.906062" lon="10.876308">
+	<ele>205.77</ele>
+	<time>2019-01-06T19:03:01.999Z</time>
+	<pdop>4.00</pdop>
+	<extensions>
+		<gpxtpx:TrackPointExtension>
+			<gpxtpx:course>100.59097</gpxtpx:course>
+		</gpxtpx:TrackPointExtension>
+	</extensions>
+</trkpt>
+</trkseg>
+</trk>
+</gpx>

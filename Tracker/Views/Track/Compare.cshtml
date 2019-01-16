@@ -1,48 +1,54 @@
 ﻿@model Tracker.Models.CompareViewModel
 @{
     ViewBag.Title = "Porównanie tras";
+    Layout = "~/Views/Shared/_LayoutWide.cshtml";
+    var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+    serializer.MaxJsonLength = Int32.MaxValue;
+    var trackPoints1 = serializer.Serialize(Model.Segments1);
+    var trackPoints2 = serializer.Serialize(Model.Track2TrackPoints);
+    var segments2 = serializer.Serialize(Model.Segments2);
 }
 
-<div class="panel-group">
-    <div class="panel50">
-        <div class="track-info">
-            <div class="track-info-row">
-                <p><span>Trasa: @Html.ActionLink(Model.Track1.Name, "Details", new { id = Model.Track1.Id }, null)</span></p>
-            </div>
-            <div class="track-info-row">
-                <p><span>Średnia prędkość:</span> @Model.Track1.AvarageSpeed</p>
-            </div>
-            <div class="track-info-row">
-                <p><span>Data dodania:</span> @Model.Track1.UploadDate</p>
-            </div>
+<div class="track-compare-panel">
+    <div class="segments-info">
+        <div class="segment-track-info">
+            @Html.ActionLink("> " + Model.Track2.Name, "Details", new { id = Model.Track2.Id }, null)
+            @if (Model.Track2.User != null)
+            {
+                <p><span>Użytkownik:</span> @Model.Track2.User.UserName</p>
+            }
+            else
+            {
+                <p><span>Użytkownik:</span> brak</p>
+            }
         </div>
-        <div id="map1" class="compare-map"></div>
-    </div>
-    <div class="panel50">
-        <div class="track-info">
-            <div class="track-info-row">
-                <p><span>Trasa: @Html.ActionLink(Model.Track2.Name, "Details", new { id = Model.Track2.Id }, null)</span></p>
-            </div>
-            <div class="track-info-row">
-                <p><span>Średnia prędkość:</span> @Model.Track2.AvarageSpeed</p>
-            </div>
-            <div class="track-info-row">
-                <p><span>Data dodania:</span> @Model.Track2.UploadDate</p>
-            </div>
+        <div class="segments-scrollable">
+            @for (int i = 0; i < Model.Segments2.Count; i++)
+            {
+                <div class="segment" index="@i">
+                    <p class="segment-title"><span>Segment @(i + 1):</span> @Model.Segments2[i].TrackPoints.Count punktów</p>
+                    @if (@Model.Segments2[i].Distance == 0)
+                    {
+                        <p class="segment-parameter"><span>Dystans:</span> Brak danych</p>
+                    }
+                    else
+                    {
+                        <p class="segment-parameter"><span>Dystans:</span> @Math.Round(@Model.Segments2[i].Distance, 2) km</p>
+                    }
+
+                    @if (@Model.Segments2[i].AvarageSpeed == 0)
+                    {
+                        <p class="segment-parameter"><span>Średnia prędkość:</span> Brak danych</p>
+                    }
+                    else
+                    {
+                        <p class="segment-parameter"><span>Średnia prędkość:</span> @Math.Round(@Model.Segments2[i].AvarageSpeed, 3) km/h</p>
+                    }
+                </div>
+            }
         </div>
-        <div id="map2" class="compare-map"></div>
     </div>
-</div>
-
-<div class="panel-group">
-    <div class="panel">
-        <h2>Porównanie tras</h2>
-
-        <p>
-            Znaleziono @Model.Segments2.Count segmentów trasy @Html.ActionLink(Model.Track2.Name, "Details", new { id = Model.Track2.Id }, null) 
-            podobnych do trasy @Html.ActionLink(Model.Track2.Name, "Details", new { id = Model.Track2.Id }, null)
-        </p>
-    </div>
+    <div id="map" class="compare-map"></div>
 </div>
 
 @section Scripts
@@ -52,32 +58,36 @@
             crossorigin="">
     </script>
     <script>
+
+        let map = L.map('map');
+        /*L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
+            maxZoom: 18,
+        }).addTo(map);*/
+        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            maxZoom: 18,
+            id: 'mapbox.streets',
+            accessToken: 'pk.eyJ1IjoiZ3JhYXR6IiwiYSI6ImNqajV6ZzJlMjBnczIzcG8zNWxrNWs3MTMifQ.BJ-5hUitaJan8HS_tub4rw'
+        }).addTo(map);
+
         initMaps();
 
         function initMaps() {
-            let segments1 = @Html.Raw(Json.Encode(Model.Segments1));
-            let segments2 = @Html.Raw(Json.Encode(Model.Segments2));
+            let segments1 = @Html.Raw(trackPoints1);
+            let track2 = @Html.Raw(trackPoints2);
 
-            let segments3 = new Array();
-            segments3.push(segments2[5]);
-
-            let mapBounds = initSegments(segments2, 'map2', 'blue');
-            initMap(segments1[0], 'map1', 'red', mapBounds);
+            initSegments(segments1, 'map', '#0066ff', 4);
+            initTrackPoints(track2, 'map', '#000', 4);
         }
 
-        function initSegments(segments, mapId, color, bounds) {
-            let map = L.map(mapId);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
-                maxZoom: 18,
-            }).addTo(map);
-
+        function initSegments(segments, mapId, color, weight) {
             let trackPoints = new Array();
 
             for (let i = 0; i < segments.length; i++) {
                 let data = segments[i];
                 let segmentPoints = new Array();
-                    
+
                 for (let i = 0; i < data.length; i++) {
                     let obj = data[i];
                     segmentPoints.push(new L.LatLng(obj.Latitude, obj.Longitude));
@@ -86,32 +96,48 @@
                 trackPoints.push(segmentPoints);
             }
 
-            let polyline = L.polyline(trackPoints, { color: color }).addTo(map);
+            let polyline = L.polyline(trackPoints, { color: color, weight: weight }).addTo(map);
             map.fitBounds(polyline.getBounds());
-
-            return polyline.getBounds();
         }
 
-        function initMap(trackData, mapId, color, bounds) {
-            let data = trackData;
+        function initTrackPoints(trackPoints, mapId, color, weight) {
+            let trkpts = new Array();
 
-            var trackCoordinates = new Array();
-
-            for (var i = 0; i < data.length; i++) {
-                let obj = data[i];
-                trackCoordinates.push(new L.LatLng(obj.Latitude, obj.Longitude));
+            for (let i = 0; i < trackPoints.length; i++) {
+                let obj = trackPoints[i];
+                trkpts.push(new L.LatLng(obj.Latitude, obj.Longitude));
             }
-            var map = L.map(mapId).setView([51.505, -0.09], 13);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
-                maxZoom: 18,
-            }).addTo(map);
 
-            var polyline = L.polyline(trackCoordinates, { color: color }).addTo(map);
-            map.fitBounds(bounds);
-
-            let startMarker = L.marker(trackCoordinates[0]).addTo(map);
-            let endMarker = L.marker(trackCoordinates[trackCoordinates.length - 1]).addTo(map);
+            let polyline = L.polyline(trkpts, { color: color, weight: weight, opacity: 0.4 }).addTo(map);
         }
+
+        $(document).ready(function () {
+            let polylines = new Array;
+            let segments = @Html.Raw(segments2);
+            $(".segment").hover(function () {
+                let segmentIndex = $(this).attr("index");
+
+                let data = segments[segmentIndex];
+                let segmentPoints = new Array();
+
+                for (let i = 0; i < data.TrackPoints.length; i++) {
+                    let obj = data.TrackPoints[i];
+                    segmentPoints.push(new L.LatLng(obj.Latitude, obj.Longitude));
+                }
+
+                polylines.push(L.polyline(segmentPoints, { color: 'red', weight: 6 }).addTo(map));
+                //map.setView([data.TrackPoints[0].Latitude, data.TrackPoints[0].Longitude], 15);
+
+                $(this).click(function () {
+                    map.fitBounds(polylines[polylines.length - 1].getBounds());
+                })
+            })
+
+            $(".segment").mouseleave(function () {
+                for (let i = 0; i < polylines.length; i++) {
+                    map.removeLayer(polylines[i]);
+                }
+            })
+        });
     </script>
 }

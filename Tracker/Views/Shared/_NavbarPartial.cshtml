@@ -1,0 +1,38 @@
+﻿<div class="navbar">
+    <div class="nav">
+        <ul class="menu">
+            <li class="menu-item">
+                <i class="fas fa-home"></i>
+                @Html.ActionLink("Strona główna", "Index", "Home")
+            </li>
+
+            <li class="menu-item">
+                <i class="fas fa-route"></i>
+                @Html.ActionLink("Trasy", "ListTracks", "Track", new { startingIndex = 0 }, null)
+            </li>
+
+            <li class="menu-item">
+                <i class="fas fa-search"></i>
+                @Html.ActionLink("Szukaj", "Search", "Track")
+            </li>
+
+            @if (User.IsInRole("Admin"))
+            {
+                <li class="menu-item">
+                    <i class="fas fa-tools"></i>
+                    @Html.ActionLink("Panel administratora", "Index", "Admin")
+                </li>
+            }
+
+            <li class="menu-button">
+                <input type="button" value="Prześlij trasę" class="button-default" onclick="location.href='@Url.Action("UploadForm", "Track")'" />
+            </li>
+
+            <li class="menu-button">
+                <input type="button" value="Importuj trasy" class="button-info" onclick="location.href='https://www.strava.com/oauth/authorize?client_id=27093&redirect_uri=http%3a%2f%2flocalhost%3a53245%2fStravaTrack%2fAuthorize&response_type=code&approval_prompt=force&scope=view_private'" />
+            </li>
+        </ul>
+
+        @Html.Partial("_LoginPartial")
+    </div>
+</div>

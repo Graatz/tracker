@@ -1,0 +1,83 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="panel-group">
+    <div class="panel50">
+        <h2>OpenStreetMap crawler</h2>
+        <div class="crawler-form">
+            <img class="crawler-img" src="~/Content/osm.png" />
+
+            <div class="form-group">
+                <label>Crawl from page: </label>
+                <input type="text" id="pageFrom" />
+                <label>Crawl to page: </label>
+                <input type="text" id="pageTo" />
+                <button class="button-default run-button">Run crawler</button>
+            </div>
+        </div>
+    </div>
+    <div class="panel50">
+        <div class="crawler-log">
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            let lock = false;
+
+            $(".run-button").click(function () {
+                if (!lock)
+                    initCrawling();
+                else
+                    appendLog("Crawler jest już w trakcie pobierania tras. Poczekaj na zakończenie operacji.", "red");
+            })
+
+            function initCrawling() {
+                let pageFrom = $("#pageFrom").val();
+                let pageTo = $("#pageTo").val();
+
+                if (pageFrom > 0 && pageTo > 0 && pageTo >= pageFrom) {
+                    lock = true;
+                    appendLog("Pobieranie danych z OpenStreetMap zostało zainicjowane", "green");
+                    appendLog("Rozpoczęto pobieranie danych ze stron " + pageFrom + " - " + pageTo, "gray");
+                    crawlPage(pageFrom, pageTo);
+                }
+                else {
+                    appendLog("Aby zainicjowac pobieranie danych, wprowadz poprawną wartość stron", "red");
+                }
+
+            }
+
+            function crawlPage(page, pageTo) {
+                if (page <= pageTo) {
+                    appendLog("Pobieranie strony " + page, "gray");
+                    $.post('@Url.Action("CrawlPage", "WebCrawler")', { page: page }, function(data) {
+                        appendLog("ODPOWIEDŹ SERWERA: " + data, "gray");
+                        crawlPage(parseInt(page) + 1, pageTo);
+                    });
+                }
+                else {
+                    appendLog("Pobieranie danych zostało zakończone", "green");
+                    lock = false;
+                }
+            }
+
+            function appendLog(message, color) {
+                let date = new Date();
+                let hours = date.getHours();
+                let minutes = date.getMinutes();
+                let seconds = date.getSeconds();
+
+                let time = hours + ":" + minutes + ":" + seconds;
+
+                $(".crawler-log").append('<p style="color: ' + color + '">' + "[" + time + "] " + message + "</p> ");
+                $(".crawler-log").scrollTop(100000);
+            }
+        });
+    </script>   
+}
+

@@ -53,13 +53,6 @@ namespace Tracker.Controllers
             }
         }
 
-        public ViewResult UsersTable()
-        {
-            var model = db.Users.ToList();
-
-            return View(model);
-        }
-
         public ViewResult ManageConfig()
         {
             var userId = User.Identity.GetUserId();
@@ -127,7 +120,7 @@ namespace Tracker.Controllers
                 db.SaveChanges();
             }
 
-            return RedirectToAction("UsersTable");
+            return RedirectToAction("UsersTable", "Admin");
         }
         //
         // GET: /Manage/Index

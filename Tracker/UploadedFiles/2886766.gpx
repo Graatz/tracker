@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="GPS Track Editor" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gte="http://www.gpstrackeditor.com/xmlschemas/General/1" xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v1" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" targetNamespace="http://www.topografix.com/GPX/1/1" elementFormDefault="qualified" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+<metadata>
+	<name>solution_201812030831.gpx</name>
+</metadata>
+<trk>
+	<name>03 December 2018</name>
+	<trkseg>
+		<trkpt lat="-8.907664" lon="13.162433">
+			<ele>30.75</ele>
+			<time>2018-12-03T08:32:10Z</time>
+			<fix>3d</fix>
+			<sat>7</sat>
+			<extensions>
+				<gte:gps speed="25.8" azimuth="352.8"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.907596" lon="13.162432">
+			<ele>28.50</ele>
+			<time>2018-12-03T08:32:11Z</time>
+			<fix>3d</fix>
+			<sat>7</sat>
+			<extensions>
+				<gte:gps speed="22.7" azimuth="353.5"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.907301" lon="13.162443">
+			<ele>20.69</ele>
+			<time>2018-12-03T08:32:15Z</time>
+			<fix>3d</fix>
+			<sat>7</sat>
+			<extensions>
+				<gte:gps speed="29.3" azimuth="359.2"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.907073" lon="13.162437">
+			<ele>23.90</ele>
+			<time>2018-12-03T08:32:18Z</time>
+			<fix>3d</fix>
+			<sat>7</sat>
+			<extensions>
+				<gte:gps speed="33.3" azimuth="3.7"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.906996" lon="13.162446">
+			<ele>24.94</ele>
+			<time>2018-12-03T08:32:19Z</time>
+			<fix>3d</fix>
+			<sat>7</sat>
+			<extensions>
+				<gte:gps speed="32.7" azimuth="3.2"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.906605" lon="13.162471">
+			<ele>36.04</ele>
+			<time>2018-12-03T08:32:25Z</time>
+			<sat>7</sat>
+			<extensions>
+				<gte:gps speed="23.0" azimuth="11.7"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.906014" lon="13.162641">
+			<ele>0.58</ele>
+			<time>2018-12-03T08:32:32Z</time>
+			<fix>3d</fix>
+			<sat>10</sat>
+			<extensions>
+				<gte:gps speed="37.7" azimuth="12.9"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.905829" lon="13.162693">
+			<ele>0.86</ele>
+			<time>2018-12-03T08:32:34Z</time>
+			<fix>3d</fix>
+			<sat>10</sat>
+			<extensions>
+				<gte:gps speed="38.3" azimuth="16.6"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.905725" lon="13.162723">
+			<ele>5.90</ele>
+			<time>2018-12-03T08:32:35Z</time>
+			<fix>3d</fix>
+			<sat>9</sat>
+			<extensions>
+				<gte:gps speed="37.8" azimuth="15.3"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.905647" lon="13.162741">
+			<ele>1.08</ele>
+			<time>2018-12-03T08:32:36Z</time>
+			<fix>3d</fix>
+			<sat>10</sat>
+			<extensions>
+				<gte:gps speed="36.3" azimuth="13.0"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.905551" lon="13.162758">
+			<ele>3.89</ele>
+			<time>2018-12-03T08:32:37Z</time>
+			<fix>3d</fix>
+			<sat>8</sat>
+			<extensions>
+				<gte:gps speed="36.0" azimuth="11.2"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.905483" lon="13.162781">
+			<ele>0.41</ele>
+			<time>2018-12-03T08:32:38Z</time>
+			<fix>3d</fix>
+			<sat>10</sat>
+			<extensions>
+				<gte:gps speed="33.7" azimuth="16.2"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.905398" lon="13.162800">
+			<ele>0.98</ele>
+			<time>2018-12-03T08:32:39Z</time>
+			<fix>3d</fix>
+			<sat>10</sat>
+			<extensions>
+				<gte:gps speed="33.4" azimuth="22.3"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.904970" lon="13.162981">
+			<ele>0.59</ele>
+			<time>2018-12-03T08:32:46Z</time>
+			<fix>3d</fix>
+			<sat>8</sat>
+			<extensions>
+				<gte:gps speed="29.2" azimuth="30.4"/>
+			</extensions>
+		</trkpt>
+		<trkpt lat="-8.904867" lon="13.163049">
+			<ele>-9.12</ele>
+			<time>2018-12-03T08:32:48Z</time>
+			<fix>3d</fix>
+			<sat>6</sat>
+			<extensions>
+				<gte:gps speed="22.2" azimuth="35.6"/>
+			</extensions>
+		</trkpt>
+		<extensions>
+			<gte:name>#1</gte:name>
+			<gte:color>#fffb7b</gte:color>
+		</extensions>
+	</trkseg>
+</trk>
+</gpx>

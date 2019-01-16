@@ -1,0 +1,43 @@
+﻿@model Tracker.Models.ListTracksViewModel
+
+@{
+    ViewBag.Title = "Trasy";
+}
+
+<div class="panel-group">
+    <div class="panel">
+        <h2>Trasy (Strona @(Model.PaginationViewModel.CurrentPage + 1))</h2>
+        @if (Model.PaginationViewModel.NumberOfTracks == 0)
+        {
+            <div class="no-tracks-available-info">
+                <p>Brak wyników</p>
+            </div>
+        }
+
+        <div class="track-cards">
+            @foreach (var track in Model.Tracks)
+            {
+                <div class="track-card">
+                    @Html.ActionLink(@track.Name, "Details", new { id = track.Id }, null)
+                    <div class="track-card-row">
+                        <p><span>Data dodania:</span> @track.UploadDate</p>
+                    </div>
+                    <div class="track-card-row">
+                        <p><span>Start:</span> @track.StartLocation</p>
+                        <p><span>Koniec:</span> @track.EndLocation</p>
+                    </div>
+                    <div class="track-card-row">
+                        <p><span>Dystans:</span> @Math.Round(track.Distance, 2) km</p>
+                    </div>
+                </div>
+
+            }
+        </div>
+
+        @Html.Partial("_SearchModelPaginationPartial", Model.PaginationViewModel)
+        
+    </div>
+</div>
+
+
+

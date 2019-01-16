@@ -1,23 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Xml;
+using Tracker.DTO;
 using Tracker.Models;
 
 namespace Tracker.Helpers
 {
-    static class MyExtensions
-    {
-        public static List<T> Splice<T>(this List<T> list, int index, int count)
-        {
-            List<T> range = list.GetRange(index, count);
-            list.RemoveRange(index, count);
-            return range;
-        }
-    }
-
     public static class GeoMath
     {
         public static string ReversedGeoLocation(double lat, double lng)
@@ -77,36 +69,78 @@ namespace Tracker.Helpers
 
         public static double CalculateTrackTime(List<TrackPoint> trackPoints)
         {
-            double trackTime = trackPoints[trackPoints.Count - 1].Date.Subtract(trackPoints[0].Date).TotalHours;
+            double trackTime = 0;
+            if (trackPoints[trackPoints.Count - 1].Date != null && trackPoints[0].Date != null)
+                trackTime = trackPoints[trackPoints.Count - 1].Date.Value.Subtract(trackPoints[0].Date.Value).TotalMinutes;
 
             return trackTime;
         }
 
         public static double CalculateAvarageTrackSpeed(List<TrackPoint> trackPoints)
         {
-            var trackTime = CalculateTrackTime(trackPoints);
+            var trackTime = CalculateTrackTime(trackPoints) / 60;
+            var trackDistance = CalculateTrackDistance(trackPoints);
 
-            if (trackTime <= 0)
+            if (trackTime <= 0 || trackDistance <= 0)
                 return 0;
 
-            double avgTrackSpeed = CalculateTrackDistance(trackPoints) / CalculateTrackTime(trackPoints);
+            double avgTrackSpeed = trackDistance / trackTime;
 
             return avgTrackSpeed;
         }
 
-        public static List<Track> GetTracksCloseToTrack(List<TrackPoint> points, List<TrackPoint> route, double distance = 0.000001)
+        public static List<Track> GetTracksCloseToTrack(List<TrackPoint> points, List<TrackPoint> route, double distance, TimeSpan timeSpan)
         {
             List<Track> closeTracks = new List<Track>();
 
-            double distance2 = Math.Pow(distance, 2);
             for (int i = 0; i < route.Count - 1; i++)
             {
-                for (int j = 0; j < points.Count; j++)
+                double minLatitude = 0.0, maxLatitude = 0.0, minLongitude = 0.0, maxLongitude = 0.0;
+
+                if (route[i].Latitude > route[i + 1].Latitude)
                 {
-                    if (DistanceToSegment(points[j], route[i], route[i + 1], Math.Pow(distance, 2)) <= distance)
+                    maxLatitude = route[i].Latitude + distance;
+                    minLatitude = route[i + 1].Latitude - distance;
+                }
+                else
+                {
+                    maxLatitude = route[i + 1].Latitude + distance;
+                    minLatitude = route[i].Latitude - distance;
+                }
+
+                if (route[i].Longitude > route[i + 1].Longitude)
+                {
+                    maxLongitude = route[i].Longitude + distance;
+                    minLongitude = route[i + 1].Longitude - distance;
+                }
+                else
+                {
+                    maxLongitude = route[i + 1].Longitude + distance;
+                    minLongitude = route[i].Longitude - distance;
+                }
+
+                var similarTrackPoints = points.Where(
+                    tp =>
+                    tp.Latitude >= minLatitude &&
+                    tp.Latitude <= maxLatitude &&
+                    tp.Longitude >= minLongitude &&
+                    tp.Longitude <= maxLongitude &&
+                    tp.TrackId != route[i].TrackId).ToList();
+
+                for (int j = 0; j < similarTrackPoints.Count - 1; j+=2)
+                {
+                    if (similarTrackPoints[j].Date == null || route[i].Date == null)
+                        continue;
+
+                    var timeDifference = similarTrackPoints[j].Date.Value.Subtract(route[i].Date.Value);
+                    if (Math.Abs(timeDifference.TotalMinutes) > timeSpan.TotalMinutes)
+                        continue;
+
+                    if (DistanceToSegment(similarTrackPoints[j], route[i], route[i + 1]) <= distance)
                     {
-                        closeTracks.Add(points[j].Track);
-                        points.RemoveAll(tp => tp.TrackId == points[j].TrackId);
+                        closeTracks.Add(similarTrackPoints[j].Track);
+                        points.RemoveAll(tp => tp.TrackId == similarTrackPoints[j].TrackId);
+                        similarTrackPoints.RemoveAll(tp => tp.TrackId == closeTracks[closeTracks.Count-1].Id);
                     }
                 }
 
@@ -115,36 +149,122 @@ namespace Tracker.Helpers
             return closeTracks;
         }
 
-        public static List<TrackPoint> GetPointsCloseToTrack(List<TrackPoint> points, List<TrackPoint> route, double distance = 0.000001)
+        public static List<TrackPoint> GetPointsCloseToTrack(List<TrackPoint> points, List<TrackPoint> route, double distance, TimeSpan timeSpan)
         {
             List<TrackPoint> closePoints = new List<TrackPoint>();
 
             double distance2 = Math.Pow(distance, 2);
+            //double.TryParse(Math.Pow(distance, 2).ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out distance2);
+            
+            double marigndistance = distance;
+
             for (int i = 0; i < route.Count - 1; i++)
             {
-                for (int j = points.Count - 1; j >= 0; j--)
+                double minLatitude = 0.0, maxLatitude = 0.0, minLongitude = 0.0, maxLongitude = 0.0;
+
+                if (route[i].Latitude >= route[i + 1].Latitude)
                 {
-                    if (DistanceToSegment(points[j], route[i], route[i + 1], Math.Pow(distance, 2)) <= distance)
+                    maxLatitude = route[i].Latitude + marigndistance;
+                    minLatitude = route[i + 1].Latitude - marigndistance;
+                }
+                else
+                {
+                    maxLatitude = route[i + 1].Latitude + marigndistance;
+                    minLatitude = route[i].Latitude - marigndistance;
+                }
+
+                if (route[i].Longitude >= route[i + 1].Longitude)
+                {
+                    maxLongitude = route[i].Longitude + marigndistance;
+                    minLongitude = route[i + 1].Longitude - marigndistance;
+                }
+                else
+                {
+                    maxLongitude = route[i + 1].Longitude + marigndistance;
+                    minLongitude = route[i].Longitude - marigndistance;
+                }
+
+                var similarTrackPoints = points.Where(tp => tp.Latitude >= minLatitude &&
+                    tp.Latitude <= maxLatitude &&
+                    tp.Longitude >= minLongitude &&
+                    tp.Longitude <= maxLongitude).ToList();
+
+                for (int j = 0 ; j < similarTrackPoints.Count; j++)
+                {
+                    if (similarTrackPoints[j].Date == null || route[i].Date == null)
+                        continue;
+
+                    var timeDifference = similarTrackPoints[j].Date.Value.Subtract(route[i].Date.Value);
+                    if (Math.Abs(timeDifference.TotalMinutes) > timeSpan.TotalMinutes)
+                        continue;
+
+                    if (DistanceToSegment(similarTrackPoints[j], route[i], route[i + 1]) <= distance2)
+                    { 
+                        closePoints.Add(similarTrackPoints[j]);
+                        points.RemoveAll(p => p.Id == similarTrackPoints[j].Id);
+                    }
+                }
+            
+            }
+
+            return closePoints;
+        }
+
+        /*public static List<TrackPoint> GetPointsCloseToTrack(List<TrackPoint> points, List<TrackPoint> route, double distance, TimeSpan timeSpan)
+        {
+            List<TrackPoint> closePoints = new List<TrackPoint>();
+
+            double distance2 = Math.Pow(distance, 2);
+            //double.TryParse(Math.Pow(distance, 2).ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out distance2);
+
+            for (int i = 0; i < route.Count - 1; i++)
+            {
+                for (int j = 0; j < points.Count; j++)
+                {
+                    if (points[j].Date == null || route[i].Date == null)
+                        continue;
+
+                    var timeDifference = points[j].Date.Value.Subtract(route[i].Date.Value);
+                    if (Math.Abs(timeDifference.TotalMinutes) > timeSpan.TotalMinutes)
+                        continue;
+
+                    if (DistanceToSegment(points[j], route[i], route[i + 1]) <= distance2)
                     {
-                        TrackPoint closePoint = points.Splice(j, 1)[0];
-                        closePoints.Add(closePoint);
+                        closePoints.Add(points[j]);
+                        points.RemoveAt(j--);
                     }
                 }
 
             }
 
             return closePoints;
-        }
+        }*/
 
-        public static double DistanceToSegment(TrackPoint p, TrackPoint v, TrackPoint w, double distance)
+        public static double DistanceToSegment(TrackPoint point, TrackPoint segmentA, TrackPoint segmentB)
         {
-            double len2 = Dist2(v, w);
-            if (len2 == 0) return Dist2(p, v);
-            double q = ((p.Longitude - v.Longitude) * (w.Longitude - v.Longitude) + (p.Latitude - v.Latitude) * (w.Latitude - v.Latitude)) / len2;
-            if (q < 0) return Dist2(p, v);
-            if (q > 1) return Dist2(p, w);
-            TrackPoint i = new TrackPoint(v.Longitude + q * (w.Longitude - v.Longitude), v.Latitude + q * (w.Latitude - v.Latitude));
-            return Dist2(p, i);
+            double len2 = Dist2(segmentA, segmentB);
+
+            if (len2 == 0)
+                return Dist2(point, segmentA);
+
+            double q = ((point.Longitude - segmentA.Longitude) * 
+                (segmentB.Longitude - segmentA.Longitude) + 
+                (point.Latitude - segmentA.Latitude) * 
+                (segmentB.Latitude - segmentA.Latitude)) 
+                / len2;
+
+            if (q < 0)
+                return Dist2(point, segmentA);
+
+            if (q > 1)
+                return Dist2(point, segmentB);
+
+            TrackPoint i = new TrackPoint(
+                segmentA.Latitude + q * (segmentB.Latitude - segmentA.Latitude),
+                segmentA.Longitude + q * (segmentB.Longitude - segmentA.Longitude)       
+                );
+
+            return Dist2(point, i);
         }
 
         static double Dist2(TrackPoint p, TrackPoint q)
@@ -152,23 +272,45 @@ namespace Tracker.Helpers
             return (double)Math.Pow(p.Longitude - q.Longitude, 2) + (double)Math.Pow(p.Latitude - q.Latitude, 2);
         }
 
-        public static List<List<TrackPoint>> SplitToSegments(List<TrackPoint> trackPoints)
+        public static List<TrackSegment> SplitToSegments(List<TrackPoint> trackPoints)
         {
-            List<List<TrackPoint>> segments = new List<List<TrackPoint>>();
+            List<TrackSegment> segments = new List<TrackSegment>();
             trackPoints = trackPoints.OrderBy(tp => tp.Index).ToList();
-
             int flag = 0;
-            for (int i = 0; i <= trackPoints.Count - 1; i++)
+            
+            for (int i = 0; i < trackPoints.Count; i++)
             {
                 if (i == trackPoints.Count - 1)
                 {
-                    List<TrackPoint> segment = trackPoints.GetRange(flag, i + 1 - flag);
-                    segments.Add(segment);
+                    var trkpts = trackPoints.GetRange(flag, i + 1 - flag);
+
+                    if (trkpts.Count > 1)
+                    {
+                        TrackSegment segment = new TrackSegment()
+                        {
+                            TrackPoints = AutoMapper.Mapper.Map<List<TrackPoint>, List<TrackPointDTO>>(trkpts),
+                            AvarageSpeed = CalculateAvarageTrackSpeed(trkpts),
+                            Distance = CalculateTrackDistance(trkpts)
+                        };
+
+                        segments.Add(segment);
+                    }
                 }
                 else if (trackPoints[i].Index + 1 != trackPoints[i + 1].Index)
                 {
-                    List<TrackPoint> segment = trackPoints.GetRange(flag, i + 1 - flag);
-                    segments.Add(segment);
+                    var trkpts = trackPoints.GetRange(flag, i + 1 - flag);
+                    if (trkpts.Count > 1)
+                    {
+                        TrackSegment segment = new TrackSegment()
+                        {
+                            TrackPoints = AutoMapper.Mapper.Map<List<TrackPoint>, List<TrackPointDTO>>(trkpts),
+                            AvarageSpeed = CalculateAvarageTrackSpeed(trkpts),
+                            Distance = CalculateTrackDistance(trkpts)
+                        };
+
+                        segments.Add(segment);
+                    }
+
                     flag = i + 1;
                 }
             }
@@ -225,7 +367,6 @@ namespace Tracker.Helpers
                 TrackPoint p = new TrackPoint();
                 p.Latitude = Convert.ToDouble(currentLat) / 100000.0;
                 p.Longitude = Convert.ToDouble(currentLng) / 100000.0;
-                p.Date = DateTime.Now;
                 polyline.Add(p);
             }
 

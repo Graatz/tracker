@@ -22,5 +22,6 @@ namespace Tracker.Models
         {
             return new ApplicationDbContext();
         }
+
     }
 }
