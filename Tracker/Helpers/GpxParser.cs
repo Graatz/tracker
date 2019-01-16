@@ -17,11 +17,7 @@ namespace Tracker.Helpers
             Namespace = XNamespace.Get("http://www.topografix.com/GPX/1/1");
         }
 
-<<<<<<< HEAD
         public List<TrackPoint> Parse(Stream fileStream)
-=======
-        public List<TrackPoint> StreamToTrackPoints(Stream file)
->>>>>>> 857db886105b0c99bcffde990678e1ebee4e99c3
         {
             XDocument content = XDocument.Load(fileStream);
 
